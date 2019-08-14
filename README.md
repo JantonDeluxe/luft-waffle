@@ -1,6 +1,7 @@
 # Hallo!
 ### 13. AUGUST 2019
 Überlegung über mögliche Projekte
+
 Programmieren kennen lernen über code.org
 
 
