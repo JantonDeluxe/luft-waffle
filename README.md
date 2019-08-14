@@ -1,7 +1,11 @@
 # Hallo!
+## Unterrichtstagebuch
 ### 13. AUGUST 2019
 1. Überlegung über mögliche Projekte
 2. Programmieren kennen lernen über code.org
+
+### 14. AUGUST 2019
+Heute haben wir einen GitHub-Account, ein Repository und unsere Website erstellt.
 
 
 You can use the [editor on GitHub](https://github.com/JantonDeluxe/luft-waffle/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
