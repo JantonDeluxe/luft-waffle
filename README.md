@@ -1,8 +1,7 @@
 # Hallo!
 ### 13. AUGUST 2019
-Überlegung über mögliche Projekte
-
-Programmieren kennen lernen über code.org
+1. Überlegung über mögliche Projekte
+2. Programmieren kennen lernen über code.org
 
 
 You can use the [editor on GitHub](https://github.com/JantonDeluxe/luft-waffle/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
