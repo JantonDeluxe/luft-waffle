@@ -1,16 +1,16 @@
 # Hallo!
 ## Unterrichtstagebuch
 ### 13. AUGUST 2019
-1. Überlegung über mögliche Projekte
-2. Programmieren kennen lernen über code.org
+In unserer ersten Informatikstunde haben wir uns überlegt, was für ein Projekt wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
 
 ### 14. AUGUST 2019
-Heute haben wir einen GitHub-Account, ein Repository und unsere Website erstellt.
+Heute haben wir einen [GitHub-Account](https://github.com/JantonDeluxe), ein [Repository](https://github.com/JantonDeluxe/luft-waffle) und unsere [Website](https://jantondeluxe.github.io/luft-waffle/) erstellt.
+Für die Website haben [Jekyll](https://jekyllrb.com/)-Themes benutzt.
 
 
 You can use the [editor on GitHub](https://github.com/JantonDeluxe/luft-waffle/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Whenever you commit to this repository, GitHub Pages will run  to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 
