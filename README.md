@@ -10,6 +10,10 @@ Für die Website haben wir das [Jekyll](https://jekyllrb.com/)-Theme Minimal ben
 ### 15. AUGUST 2019
 Heute haben wir uns für einen Wasserraketen-Höhenmesser als Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C++](https://de.m.wikipedia.org/wiki/C%2B%2B) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und uns abgesprochen, wer was zu nächster Stunde vorbereitet.
 
+### 20. August 2019
+Heute haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren [alten Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) wieder ausgepackt. 
+Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
+
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
