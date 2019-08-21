@@ -192,6 +192,9 @@ double getPressure()
 }
 ```
 
+### 21. August
+Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen.
+Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
 
 
 
