@@ -1,14 +1,16 @@
 # Hallo!
 ## Inhaltsverzeichnis
-[Unterrichtstagebuch](#1)
+[Projektbeschreibung](#1)
+[Unterrichtstagebuch](#2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[13. August](#3)
 
 
-### Unser Höhenmesser
+### Projektbeschreibung<a name="1"></a>
 
-### Unterrichtstagebuch <a name="1"></a>
+### Unterrichtstagebuch <a name="2"></a>
 
 
-#### 13. August 2019
+#### 13. August 2019<a name="3"></a>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
 
 #### 14. August 2019
