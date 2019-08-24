@@ -1,6 +1,7 @@
 # Hallo!
 ## Inhaltsverzeichnis
 ***
+
 [Projektbeschreibung](#1)
 
 [Unterrichtstagebuch](#2)
@@ -30,6 +31,7 @@ Heute haben wir uns für einen Wasserraketen-Höhenmesser als Projekt entschiede
 #### 20. August 2019<a name="6"></a>
 Heute haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren [alten Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) wieder ausgepackt. 
 Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
+
 <details>
  <summary>Programm von 2015</summary>
  
