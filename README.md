@@ -12,6 +12,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[20. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[21. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[22. August](#7)
+
 ***
 
 ## Projektbeschreibung<a name="1"></a>
@@ -36,6 +37,7 @@ Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Mess
  <summary>Programm von 2015</summary>
  
 ```
+
 */
 
 // Your sketch must #include this library, and the Wire library.
@@ -212,6 +214,7 @@ double getPressure()
   }
   else oled.println("error starting temperature measurement\n");
 }
+
 ```
  </details>
 
