@@ -1,5 +1,6 @@
 # Hallo!
-##Inhaltsverzeichnis
+## Inhaltsverzeichnis
+<li><a href="#1">1. Einleitung</a></li>
 ### Unser Höhenmesser
 ### Unterrichtstagebuch
 
