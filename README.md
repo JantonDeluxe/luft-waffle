@@ -1,25 +1,27 @@
 # Hallo!
+## Unser Höhenmesser
 ## Unterrichtstagebuch
 <details>
-  <summary>13. August 2019</summary>
+  <summary>**13. August 2019**</summary>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
    </details>
 
 <details>
- <summary>14. August 2019</summary>
+ <summary>**14. August 2019**</summary>
 Heute haben wir einen [GitHub-Account](https://github.com/JantonDeluxe), ein [Repository](https://github.com/JantonDeluxe/luft-waffle) und unsere [Website](https://jantondeluxe.github.io/luft-waffle/) erstellt, die wir über den [editor](https://github.com/JantonDeluxe/luft-waffle/edit/master/README.md) bearbeiten.
 Für die Website haben wir das [Jekyll](https://jekyllrb.com/)-Theme Minimal benutzt.
    </details>
 
 <details>
- <summary>15. August 2019</summary>
+ <summary>**15. August 2019**</summary>
 Heute haben wir uns für einen Wasserraketen-Höhenmesser als Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C++](https://de.m.wikipedia.org/wiki/C%2B%2B) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und uns abgesprochen, wer was zu nächster Stunde vorbereitet.
    </details>
 
 <details>
- <summary>20. August 2019</summary>
+ <summary>**20. August 2019**</summary>
 Heute haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren [alten Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) wieder ausgepackt. 
 Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
+  
 ```
 */
 
@@ -200,13 +202,17 @@ double getPressure()
 ```
  </details>
 
-### 21. August
+<details>
+ <summary>**21. August**</summary>
 Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen.
 Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
+    </details>
 
-### 22. August
+<details>
+ <summary>**22. August**</summary>
 Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) zu unserem Bosch BMP 180-Sensor angefangen Programme auf den Mikrokontroller zu laden.
 Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert.
+    </details>
 
 
 
