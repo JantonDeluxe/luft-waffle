@@ -1,6 +1,7 @@
 # Hallo!
 ## Unterrichtstagebuch
-### 13. AUGUST 2019
+<details>
+  <summary>### 13. August 2019</summary>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
 
 ### 14. AUGUST 2019
