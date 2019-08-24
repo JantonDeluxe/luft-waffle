@@ -11,12 +11,11 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[20. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[21. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[22. August](#7)
-
-### Projektbeschreibung<a name="1"></a>
-
 ***
-### Unterrichtstagebuch <a name="2"></a>
-***
+
+## Projektbeschreibung<a name="1"></a>
+
+## Unterrichtstagebuch <a name="2"></a>
 
 #### 13. August 2019<a name="3"></a>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
