@@ -3,6 +3,7 @@
 <details>
   <summary>13. August 2019</summary>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
+   </details>
 
 <details>
  <summary>14. August 2019</summary>
