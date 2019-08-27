@@ -12,6 +12,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[20. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[21. August](#6)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[22. August](#7)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[27. August](#8)
 
 ***
 
@@ -228,7 +229,9 @@ Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tu
 Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben hat.
 
 ´´´
+
 esptool.FatalError: Timed out waiting for packet header
+
 ˋˋˋ
 
 #### 27. August< name="9"></a>
