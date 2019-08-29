@@ -234,7 +234,7 @@ hat.
 
 ˋˋˋ
 
-esptool.FatalError: Timed out waiting for packet header
+ˋesptool.FatalError: Timed out waiting for packet headerˋ
 
 ˋˋˋ
 #### 27. August<a name="9"></a>
