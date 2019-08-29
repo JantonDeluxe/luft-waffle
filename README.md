@@ -233,7 +233,7 @@ Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber in
 hat.
 
 ˋ
-esptool.FatalError: Timed out waiting for packet headerˋ
+esptool.FatalError: Timed out waiting for packet header
 ˋ
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
