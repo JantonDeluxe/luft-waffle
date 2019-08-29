@@ -232,11 +232,9 @@ Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tu
 Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben 
 hat.
 
-ˋˋˋ
-
-ˋesptool.FatalError: Timed out waiting for packet headerˋ
-
-ˋˋˋ
+ˋ
+esptool.FatalError: Timed out waiting for packet headerˋ
+ˋ
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
 
