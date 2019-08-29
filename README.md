@@ -229,14 +229,14 @@ Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwell
 
 #### 22. August<a name="8"></a>
 Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) zu unserem Bosch BMP 180-Sensor angefangen Programme auf den Mikrokontroller zu laden.
-Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben hat.
+Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben 
+hat.
 
 ´´´
 
 esptool.FatalError: Timed out waiting for packet header
 
 ˋˋˋ
-
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
 
@@ -245,6 +245,7 @@ An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Dat
 
 #### 29.August<a name="11"></a>
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
+
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
