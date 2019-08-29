@@ -237,6 +237,11 @@ esptool.FatalError: Timed out waiting for packet header
 #### 27. August< name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
 
+#### 28.August< name="10"></a>
+An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
+
+#### 29.August< name="11"></a>
+Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
