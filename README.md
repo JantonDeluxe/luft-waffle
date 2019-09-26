@@ -232,7 +232,10 @@ Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tu
 Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben 
 hat.
 
-`esptool.FatalError: Timed out waiting for packet headed`
+```
+esptool.FatalError: Timed out waiting for packet headed
+
+```
 
 
 #### 27. August<a name="9"></a>
@@ -244,6 +247,20 @@ An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Dat
 #### 29.August<a name="11"></a>
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
+#### 11. September<a name="12"></a>
+Arduino-Tutorial
+
+#### 12. September<a name="13"></a
+ Arduino-Tutorial
+
+#### 24. September<a name="14"></a>
+neues Layout für die Anzeige
+
+#### 25. September<a name="15"></a>
+Pointer für Temperatur ausprobiert, damit nicht nur die Anfangstemperatur angezeigt wird
+
+#### 26. September<a name="16"></a>
+Pointer nicht möglich, weil das nicht mit den Funktionen aus der Library zusammenpasst
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
