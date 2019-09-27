@@ -37,7 +37,8 @@ Heute haben wir uns für ein Arduino-Projekt entschieden und dafür angefangen, 
 #### 20. August 2019<a name="6"></a>
 Heute haben wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu bauen. Diese Art von Höhenmesser kostet off-the-shelf mindestens 50€, weshalb wir Geld sparen und den Sensor selbst bauen wollen. 
 Basieren tut der Höhenmesser auf einem Versuch, den ich, Anton, vor vier Jahren mit meinem Vater unternommen habe. Der [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) hatte jedoch einige Schwachstellen, weshalb wir ihn nie zuende gebaut haben: Durch die zwei 7-Segment-Anzeigen konnte immer nur eine Information angezeigt werden, es konnten keine Daten ausgelesen werden, da der Arduino nano sich bei USB Verbindungen resettet und es konnten keine längeren Messreihen wie Flugverläufe gespeichert werden, da der Speicher dafür nicht ausgereicht hat.
-![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg#thumbnail "Alter Höhenmesser")
+
+![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg =250px)
 Dafür haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren  wieder ausgepackt. 
 Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
 
