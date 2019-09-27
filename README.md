@@ -24,17 +24,20 @@
 ## Unterrichtstagebuch <a name="2"></a>
 
 #### 13. August 2019<a name="3"></a>
-In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf code.org mit einem Einsteiger-Kurs angefangen.
+In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf [code.org](https://code.org/) mit einem Einsteiger-Kurs angefangen.
+Unsere Vorkenntnisse sind auf einfache Programmieraufgaben mit [Scratch](https://de.wikipedia.org/wiki/Scratch_(Programmiersprache)) im Rahmen des Jugendwettbewerbs Informatik beschränkt.
 
 #### 14. August 2019<a name="4"></a>
 Heute haben wir einen [GitHub-Account](https://github.com/JantonDeluxe), ein [Repository](https://github.com/JantonDeluxe/luft-waffle) und unsere [Website](https://jantondeluxe.github.io/luft-waffle/) erstellt, die wir über den [editor](https://github.com/JantonDeluxe/luft-waffle/edit/master/README.md) bearbeiten.
-Für die Website haben wir das [Jekyll](https://jekyllrb.com/)-Theme Minimal benutzt.
+Für die Website benutzen wir das [Jekyll](https://jekyllrb.com/)-Theme Minimal.
 
 #### 15. August 2019<a name="5"></a>
-Heute haben wir uns für einen Wasserraketen-Höhenmesser als Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C++](https://de.m.wikipedia.org/wiki/C%2B%2B) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und uns abgesprochen, wer was zu nächster Stunde vorbereitet.
+Heute haben wir uns für ein Arduino-Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C](https://de.wikipedia.org/wiki/C_(Programmiersprache)) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und weiterüberlegt, wie wir am besten lernen und was für ein Projekt genau wir umsetzen wollen.
 
 #### 20. August 2019<a name="6"></a>
-Heute haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren [alten Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) wieder ausgepackt. 
+Heute haben wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu bauen. Diese Art von Höhenmesser kostet off-the-shelf mindestens 50€, weshalb wir Geld sparen und den Sensor selbst bauen wollen. Basieren tut der Höhenmesser auf einem Versuch, den ich, Anton, vor vier Jahren mit meinem Vater unternommen habe. Der [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) hatte jedoch einige Schwachstellen, weshalb wir ihn nie zuende gebaut haben: Durch die zwei 7-Segment-Anzeigen konnte immer nur eine Information angezeigt werden, es konnten keine Daten ausgelesen werden, da der Arduino nano sich bei USB Verbindungen resettet und es konnten keine längeren Messreihen wie Flugverläufe gespeichert werden, da der Speicher dafür nicht ausgereicht hat.
+![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
+Dafür haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren  wieder ausgepackt. 
 Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
 
 <details>
