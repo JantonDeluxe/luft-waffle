@@ -75,7 +75,11 @@ Deshalb haben wir statt der neuen Universal Windows Platform App aus dem Microso
 Parallel haben wir dieses Unterrichtstagebuch fortgeführt.
 
 #### 27. August<a name="9"></a>
-Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
+Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte: Wir hatten vergessen, das Board engültig zu installieren. Das geht in der Arduino IDE unter Werkzeuge -> Board -> Boardverwalter -> Suche “ESP8266” (der ESP8266 ist der auf unserem Board verbaute Mikrocontroller) -> Installieren. Zusätzlich muss man für unser spezielles Board weitere Zusatzeinstellungen in den prefrences.txt hinzufügen, wofür es glücklicherweise eine [Vorlage](https://arduino-projekte.info/wp-content/uploads/2017/07/boards.txt) gibt. Dann muss man die Arduino IDE nur noch neustarten und das Board unter Werkzeuge -> Board auswählen. Sehr geholfen haben uns bei der Installation diesese beiden Tutorials: 
+- (https://arduino-projekte.info/installation-eps8266-modul-wie-z-b-wemos/)
+- (https://arduino-projekte.info/installation-wemos-d1-mini-lite-wemos-d1-mini-pro/)
+
+Wenn wir diesen Schritt nicht vergessen hätten, hätte das Hochladen des Programms trotzdem nicht funktioniert, da auf der Hersteller-Website des D1 eine veraltete Boardverwalter-URL angegeben war, was uns nur durch Zufall aufgefallen ist. 
 
 #### 28.August<a name="10"></a>
 An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
