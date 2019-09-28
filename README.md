@@ -39,9 +39,7 @@ Heute haben wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu
 
 Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) hatte jedoch einige Schwachstellen, weshalb wir ihn nie zuende gebaut haben: Durch die zwei 7-Segment-Anzeigen konnte immer nur eine Information angezeigt werden, es konnten keine Daten ausgelesen werden, da der Arduino nano sich bei USB Verbindungen resettet und es konnten keine längeren Messreihen wie Flugverläufe gespeichert werden, da der Speicher dafür nicht ausgereicht hat.
 
-<img src="https://user-images.githubusercontent.com/11951281_10153345040958153_9145140276330392700_n.jpg">
-
-![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg =250px)
+![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
 Dafür haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren  wieder ausgepackt. 
 Aktueller Stand: Der Höhenmesser kalibriert sich am Anfang durch 100faches Messen und rechnet damit seinen Nullwert aus. Von diesem Nullwert wird die relative Höhe berechnet und in Echtzeit auf das Display ausgegeben.
 
