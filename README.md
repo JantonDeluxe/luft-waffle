@@ -75,7 +75,9 @@ Deshalb haben wir statt der neuen Universal Windows Platform App aus dem Microso
 Parallel haben wir dieses Unterrichtstagebuch fortgeführt.
 
 #### 27. August<a name="9"></a>
-Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte: Wir hatten vergessen, das Board engültig zu installieren. Das geht in der Arduino IDE unter _Werkzeug_e -> _Board_ -> _Boardverwalter_ -> Suche “ESP8266” (der ESP8266 ist der auf unserem Board verbaute Mikrocontroller) -> _Installieren_. Zusätzlich muss man für unser spezielles Board weitere Zusatzeinstellungen in den prefrences.txt hinzufügen, wofür es glücklicherweise eine [Vorlage](https://arduino-projekte.info/wp-content/uploads/2017/07/boards.txt) gibt. Dann muss man die Arduino IDE nur noch neustarten und das Board unter Werkzeuge -> Board auswählen. Sehr geholfen haben uns bei der Installation diesese beiden Tutorials: 
+Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte: Wir hatten vergessen, das Board engültig zu installieren. Das geht in der Arduino IDE unter
+_Werkzeuge_ -> _Board_ -> _Boardverwalter_ -> Suche “ESP8266” (der ESP8266 ist der auf unserem Board verbaute Mikrocontroller) -> _Installieren_. 
+Zusätzlich muss man für unser spezielles Board weitere Zusatzeinstellungen in den prefrences.txt hinzufügen, wofür es glücklicherweise eine [Vorlage](https://arduino-projekte.info/wp-content/uploads/2017/07/boards.txt) gibt. Dann muss man die Arduino IDE nur noch neustarten und das Board unter _Werkzeuge_ -> _Board_ auswählen. Sehr geholfen haben uns bei der Installation diesese beiden Tutorials: 
 - (https://arduino-projekte.info/installation-eps8266-modul-wie-z-b-wemos/)
 - (https://arduino-projekte.info/installation-wemos-d1-mini-lite-wemos-d1-mini-pro/)
 
