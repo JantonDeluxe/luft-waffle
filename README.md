@@ -35,10 +35,11 @@ Für die Website benutzen wir das [Jekyll](https://jekyllrb.com/)-Theme Minimal.
 Heute haben wir uns für ein Arduino-Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C](https://de.wikipedia.org/wiki/C_(Programmiersprache)) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und weiterüberlegt, wie wir am besten lernen und was für ein Projekt genau wir umsetzen wollen.
 
 #### 20. August 2019<a name="6"></a>
-Heute haben wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu bauen. Diese Art von Höhenmesser kostet off-the-shelf mindestens 50€, weshalb wir Geld sparen und den Sensor selbst bauen wollen. 
-Basieren tut der Höhenmesser auf einem Versuch, den ich, Anton, vor vier Jahren mit meinem Vater unternommen habe. Der [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) hatte jedoch einige Schwachstellen, weshalb wir ihn nie zuende gebaut haben: Durch die zwei 7-Segment-Anzeigen konnte immer nur eine Information angezeigt werden, es konnten keine Daten ausgelesen werden, da der Arduino nano sich bei USB Verbindungen resettet und es konnten keine längeren Messreihen wie Flugverläufe gespeichert werden, da der Speicher dafür nicht ausgereicht hat.
+Heute haben wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu bauen. Diese Art von Höhenmesser kostet off-the-shelf mindestens 50€, weshalb wir Geld sparen und den Sensor selbst bauen wollen. Basieren tut der Höhenmesser auf einem Versuch, den ich, Anton, vor vier Jahren mit meinem Vater unternommen habe. 
 
-<img src="(https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg" alt="Alter Höhenmesser" width="200"/>
+Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-unsere-wasserrakete/) hatte jedoch einige Schwachstellen, weshalb wir ihn nie zuende gebaut haben: Durch die zwei 7-Segment-Anzeigen konnte immer nur eine Information angezeigt werden, es konnten keine Daten ausgelesen werden, da der Arduino nano sich bei USB Verbindungen resettet und es konnten keine längeren Messreihen wie Flugverläufe gespeichert werden, da der Speicher dafür nicht ausgereicht hat.
+
+<img src="(https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/The_C_Programming_Language_logo.svg/226px-The_C_Programming_Language_logo.svg.png" alt="Alter Höhenmesser" width="200"/>
 
 ![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg =250px)
 Dafür haben wir genaue Ziele festgelegt und den Laptop in iSurf angemeldet. Außerdem haben wir nach vier Jahren unseren  wieder ausgepackt. 
