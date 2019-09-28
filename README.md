@@ -45,28 +45,43 @@ Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-un
 
 ![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
 
-Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist ein No-Name-OLED-Display aus China und das neue Board ein [D1 mini Pro](https://wiki.wemos.cc/products:d1:d1_mini_pro) von WEMOS Electronics.
+Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein No-Name-OLED-Display aus China und das neue Board ein [D1 mini Pro](https://wiki.wemos.cc/products:d1:d1_mini_pro) von WEMOS Electronics.
 
 #### 21. August<a name="7"></a>
-Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen.
-Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
+Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen. 
+
+In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
+- Laptop in iSurf registriert
+- [Arduino IDE](https://www.arduino.cc/en/Guide/Windows) installiert
+- [D1 mini Pro Hardware Package](https://github.com/esp8266/Arduino) über die Arduino IDE installiert (Voreinstellungen -> zusätzliche Boardverwalter-URLs -> Link einfügen)
+- [D1 mini Pro-Treiber](https://wiki.wemos.cc/downloads) installiert
+
+Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte nur über das mitgelieferte Example-Sketch die aktuelle und maximale Höhe messen und eine von beiden anzeigen. Wenn möglich soll der neue Höhenmesser mehr können:
+1. aktuelle Höhe auf Display anzeigen
+2. maximale Höhe möglichst auf unter 1 Meter genau auf Display anzeigen
+3. Temperatur und Druckwerte auf Display anzeigen
+4. Daten auf Webserver anzeigen
+5. Geschwindigkeit und Beschleunigung ausrechnen
+6. Flugverlauf grafisch darstellen
 
 #### 22. August<a name="8"></a>
-Heute haben wir mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) zu unserem Bosch BMP 180-Sensor angefangen Programme auf den Mikrokontroller zu laden.
-Das hat leider nicht funktioniert, da auf unserem Laptop die falschen Treiber installiert waren. Deshalb haben wir sowohl die Arduino IDE, als auch den D1 Mini Pro-Treiber neu installiert, was das Problem nicht behoben 
-hat.
-
+Heute haben wir den Höhenmsser (ein [Bosch BMP 180-Sensor](https://www.sparkfun.com/products/retired/11824)) mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) mit dem Mikrocontroller auf einem Breadboard verkabelt. Dann wollten wir das Example-Sketch auf den Mikrocontroller laden, was leider nicht funktioniert hat:
 ```
 esptool.FatalError: Timed out waiting for packet headed
 
 ```
+Deshalb haben wir statt der neuen Universal Windows Platform App aus dem Microsoft Store die Arduino IDE diesmal als normales Windows-Programm (über den .exe Installer) installiert, was das Problem aber nicht behoben hat. Sicherheitshalber haben wir deshalb den D1-Treiber ebenfalls neu installiert und weiter nach dem Fehler gesucht.
 
+Parallel haben wir dieses Unterrichtstagebuch fortgeführt.
 
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte. Zunächst mussten wir in der Arduino IDE den unseren Mikrocontroller ESP8266 einstellen und die Voreinstellungen für unser Board verändern. Das hat dann endlich geklappt.
 
 #### 28.August<a name="10"></a>
 An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
+
+Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
+
 
 #### 29.August<a name="11"></a>
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
