@@ -810,11 +810,12 @@ char status;
 Und dann die Temperaturmessung von unten kopiert und auf's nötigste reduziert:
 ```
 status = pressure.startTemperature();
-    delay(100);
-    status = pressure.getTemperature(T);
+delay(100);
+status = pressure.getTemperature(T);
 ```
 Die Temperatur wird jetzt provisorisch unter dem Maximum angezeigt:
 ```
+// baseline-Druck anzeigen
 oled.setCursor(0, 5);          // Cursor unter die Maximumanzeige bewegen
     if (T >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
     oled.print(T);
@@ -822,7 +823,49 @@ oled.setCursor(0, 5);          // Cursor unter die Maximumanzeige bewegen
 ```
 
 #### 26. September<a name="16"></a>
-Pointer nicht möglich, weil das nicht mit den Funktionen aus der Library zusammenpasst
+Heute haben wir das neue Layout gebaut. Der baseline-Druck steht weiterhin oben rechts, jetzt aber in einer Reihe und mit der Einheit mbar statt mb:
+```
+oled.clear();
+oled.print(baseline);
+oled.print(" mbar");
+```
+Darunter kommen, immernoch im setup, die Teile der Anzeige, die sich nicht verändern - also "Hoehe:", "Max:" und Platz für sonstigen Text:
+```
+// statische Teile der Höhenanzeigen
+ oled.setCursor(0, 3);
+ oled.print("Hoehe:");
+ oled.setCursor(0,5);
+ oled.print("Max:");
+
+ // Sonstiger Text
+ oled.setCursor(0, 7);
+ oled.print("blablabla");
+```
+
+Die veränderlichen Teile der Anzeige stehen im Hauptteil des Codes:
+```
+    // Höhenunterschied anzeigen
+    oled.set2X();
+    oled.setCursor(40, 2);               // Cursor bewegen
+    if (a >= 0.0) oled.print(" ");       // Leerzeichen, wenn positive Zahl
+    oled.print(a);
+    oled.print("m");
+
+    // Maximum anzeigen
+    oled.setCursor(40, 4);               // Cursor unter die Höhenanzeige bewegen
+    if (highest >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
+    oled.print(highest);
+    oled.print("m");
+    oled.set1X();
+
+    // Temperaturanzeige
+    oled.setCursor(80, 0);
+    oled.print(T);
+    oled.println(" C");
+```
+Die Anzeige sieht jetzt so aus:
+
+ 
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
