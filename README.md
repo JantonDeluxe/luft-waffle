@@ -67,6 +67,12 @@ Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte H�
 5. Geschwindigkeit und Beschleunigung ausrechnen
 6. Flugverlauf grafisch darstellen
 
+<details><summary>Example Sketch</summary>
+<p>
+
+Diesen Beispiel-Code findet man in der Arduino IDE unter 
+_Datei_ -> _Beispiele_ -> _BMP180_ -> _Examples_ -> _BMP180_altitude_example_
+
 ```
 /* SFE_BMP180 altitude example sketch
 
@@ -236,7 +242,8 @@ double getPressure()
   else Serial.println("error starting temperature measurement\n");
 }
 ```
-
+</p>
+</details>
 
 
 #### 22. August<a name="8"></a>
