@@ -602,12 +602,23 @@ void loop() {
 </details>
 
 #### 11. September<a name="12"></a>
-Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. Dafür haben wir die beiden Testprogramme ersteinmal kombiniert und teilweise übersetzt:
+Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. Dafür haben wir die beiden Testprogramme ersteinmal kombiniert übersetzt und etwas kommentiert:
 
 <details><summary>Kombiniertes Programm</summary>
 <p>
   
 ```
+/* Höhenmesser
+
+Fehlercodes:
+
+1 - Fehler beim Erhalten des Drucks
+2 - Fehler beim Starten der Druckmessung
+3 - Fehler beim Erhalten der Temperatur
+4 - Fehler beim Starten der Temperaturmessung
+
+ */
+
 // Libraries
 #include <SFE_BMP180.h>
 #include <Wire.h>
@@ -615,7 +626,7 @@ Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. D
 #include <SSD1306AsciiWire.h>
 
 // Objekte
-SFE_BMP180 pressure;
+SFE_BMP180 pressure;   
 SSD1306AsciiWire oled;
 
 // Adresse des Displays auf 0x3C setzen
@@ -626,17 +637,18 @@ double baseline;
 
 //Setup
 void setup() {
-
+  
   //Display-Setup
   Wire.begin();
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
   oled.set400kHz();
   oled.setFont(font5x7);
+  
   oled.clear();
   oled.set2X();               
   oled.println("START");
   oled.set1X();
-  delay(1000);
+  delay(4000);
   oled.clear();
 
   //Sensor-Setup
@@ -648,7 +660,7 @@ void setup() {
     while(1);
   }
 
-  delay(1000);
+  delay(4000);
   
   // baseline-Druck messen
   baseline = getPressure();
@@ -659,7 +671,7 @@ void setup() {
   oled.println(baseline);
   oled.println(" mb");  
 
-  delay(1000);
+  delay(4000);
 }
 
 // Hauptcode
@@ -676,7 +688,7 @@ void loop() {
   oled.println("Hoehe: ");
   if (a >= 0.0) Serial.print(" ");
   oled.println(a,1);
-  oled.println(" Meter ");
+  oled.println("Meter");
  
   delay(500);
 }
@@ -685,61 +697,44 @@ void loop() {
 // Funktion getPressure() definieren
 double getPressure()
 {
+  // Variablen
   char status;
   double T,P,p0,a;
-
-  // You must first get a temperature measurement to perform a pressure reading.
   
-  // Start a temperature measurement:
-  // If request is successful, the number of ms to wait is returned.
-  // If request is unsuccessful, 0 is returned.
-
+  // Temperatur messen
   status = pressure.startTemperature();
   if (status != 0)
   {
-    // Wait for the measurement to complete:
-
+    // Warten bis Messung fertig
     delay(status);
 
-    // Retrieve the completed temperature measurement:
-    // Note that the measurement is stored in the variable T.
-    // Use '&T' to provide the address of T to the function.
-    // Function returns 1 if successful, 0 if failure.
-
+     // Temperatur erhalten
     status = pressure.getTemperature(T);
     if (status != 0)
     {
-      // Start a pressure measurement:
-      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
-      // If request is successful, the number of ms to wait is returned.
-      // If request is unsuccessful, 0 is returned.
-
-      status = pressure.startPressure(3);
+      
+      // Druck messen
+      status = pressure.startPressure(3);      // Höchste von 3 Genauigkeits-Stufen der Library
       if (status != 0)
       {
-        // Wait for the measurement to complete:
+        // Warten bis Messung fertig
         delay(status);
 
-        // Retrieve the completed pressure measurement:
-        // Note that the measurement is stored in the variable P.
-        // Use '&P' to provide the address of P.
-        // Note also that the function requires the previous temperature measurement (T).
-        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
-        // Function returns 1 if successful, 0 if failure.
-
+        //Druck erhalten
         status = pressure.getPressure(P,T);
         if (status != 0)
         {
           return(P);
         }
-        else oled.println("error retrieving pressure measurement\n");
+        else oled.println("Fehler 1");
       }
-      else oled.println("error starting pressure measurement\n");
+      else oled.println("Fehler 2");
     }
-    else oled.println("error retrieving temperature measurement\n");
+    else oled.println("Fehler 3");
   }
-  else oled.println("error starting temperature measurement\n");
+  else oled.println("Fehler 4");
 }
+
 ```
 </p>
 </details>
@@ -756,13 +751,75 @@ double getPressure()
 </details>
 
 #### 12. September<a name="13"></a
-Heute haben wir
+Heute haben wir zunächst die fehlermeldungen getestet und dann Fehlercodes aufgestellt, da die angezeigten Fehlermeldungen zu lang für das Display waren. Dabei haben wir gleich die Beschreibung unseres Codes oben erweitert:
+  
+```
+/* Höhenmesser
+
+Hardware:
+---------
+Board: WEMOS D1 mini pro V1.0
+Altimeter: Bosch BMP180
+Display: GM009605 OLED
+
+Fehlercodes:
+------------
+1 - Fehler beim Erhalten des Drucks
+2 - Fehler beim Starten der Druckmessung
+3 - Fehler beim Erhalten der Temperatur
+4 - Fehler beim Starten der Temperaturmessung
+  
+Basiert teilweise auf dem BMP180_altitude_example des Höhenmessers:
+V10 Mike Grusin, SparkFun Electronics 10/24/2013
+V1.1.2 Updates for Arduino 1.6.4 5/2015
+*/
+```
+Danach haben wir angefangen, die maximale Höhe zu berechnen. Das tun wir wie beim alten Höhenmesser mit Hilfe zweier neuer Variablen:
+```
+double highest;     // Max-Druck
+double lowest;      // Min-Druck
+```
+Wenn der gemessene Höhenunterschied (Variable a) kleiner als der kleinste bzw. größer als der größte Wert ist, wird dieser Wert als höchster (highest) bzw. kleinster (lowest) Wert gesetzt:
+```
+  if (a < lowest) lowest = a;
+
+  if (a > highest) highest = a;
+```
+Den Minimumwert wollen wir nur aus Interesse haben, der Maximumwert soll jedoch angezeigt werden:
+```
+oled.setCursor(0, 4);                  // Cursor unter die Höhenanzeige bewegen
+  if (highest >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
+oled.print(highest);                   
+oled.print("m");
+```
+Das ganze funktioniert sehr gut, sieht aber nicht gut aus. Deshalb haben wir angefangen, uns zu überlegen, wie ein besseres Layout aussehen könnte.
 
 #### 24. September<a name="14"></a>
-neues Layout für die Anzeige
+Heute haben wir für das neue Layout für die Temperatur-Anzeige angefangen. Dafür haben wir eine neue Variable deklariert:
+```
+double T;           // Temperatur
+```
+In unseren ersten Versuchen wurde erstmal nur die Temperatur zum Start-Zeitpunkt angezeigt. Das wäre akzeptabel, aber nicht das, was wir eigentlich wollen.
+Dann haben wir versucht mit Hilfe von Pointern die Temperatur aus der Definition von getPressure() zu verwenden, was elegant, aber für uns auch sehr zeitaufwändig war: Kurz vor Ende der Stunde waren wir fertig, das ganze hat jedoch nicht funktioniert hat, weil die Library dafür nicht ausgelegt ist.
 
 #### 25. September<a name="15"></a>
-Pointer für Temperatur ausprobiert, damit nicht nur die Anfangstemperatur angezeigt wird
+Heute haben wir das Temperatur-Problem auf eine relativ einfache Weise gelöst. Statt T aus der Definition von getPressure() direkt zu verwenden, haben wir die Temperaturmessung aus getPressure() kopiert und vereinfacht. Zunächst haben wir die Variable status als char deklariert:
+```
+char status;
+```
+Und dann die Temperaturmessung von unten kopiert und auf's nötigste reduziert:
+```
+status = pressure.startTemperature();
+    delay(100);
+    status = pressure.getTemperature(T);
+```
+Die Temperatur wird jetzt provisorisch unter dem Maximum angezeigt:
+```
+oled.setCursor(0, 5);          // Cursor unter die Maximumanzeige bewegen
+    if (T >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
+    oled.print(T);
+    oled.print(" C");
+```
 
 #### 26. September<a name="16"></a>
 Pointer nicht möglich, weil das nicht mit den Funktionen aus der Library zusammenpasst
