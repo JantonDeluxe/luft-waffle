@@ -293,7 +293,10 @@ Als Graph: _Werkzeuge_ -> _Serieller Plotter_
 _Blau: Höhe in Meter_
 _Rot: Höhe in feet_
 
-Die Verkabelung ist also korrekt. Aus Spaß haben wir dann noch das zweite Example Sketch, das eigentlich für Wettermessungen gedacht ist ausprobiert:
+Die Verkabelung ist also korrekt. Aus Spaß haben wir dann noch das zweite Example Sketch (siehe unten), das eigentlich für Wettermessungen gedacht ist ausprobiert. Dabei haben wir die vorgegebene Höhe (Boulder, Colorado: 1655 Meter) auf 0 gesetzt, um die gesuchte relative Höhe zu erhalten. Danach wurde uns allerdings erstmal trotz Bewegung dauerhaft die Höhe 0 angezeigt:
+![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123123r34.png)
+
+
 
 <details><summary>Example Sketch 2</summary>
 <p>
