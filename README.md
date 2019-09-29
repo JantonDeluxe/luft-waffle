@@ -523,7 +523,11 @@ Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und
 Mit dem ersten Example Skecth haben wir dann den Zeitraum gemessen, in dem die Messwerte eine Ungenauigkeit von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, sollte also etwa alle 10 Minuten eine Rekalibrierung vorgenommen werden, um einen neuen Nullwert zu errechnen.
 
 #### 29.August<a name="11"></a>
-Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
+Heute haben wir das OLED-Display angeschlossen:
+
+Überischt welcher PIN wohin
+
+bh
 
 #### 11. September<a name="12"></a>
 Arduino-Tutorial
