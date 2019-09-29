@@ -45,7 +45,7 @@ Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-un
 
 ![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
 
-Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein No-Name-OLED-Display aus China und das neue Board ein [D1 mini Pro](https://wiki.wemos.cc/products:d1:d1_mini_pro) von WEMOS Electronics.
+Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein No-Name-OLED-Display aus China und das neue Board ein [D1 mini Pro V1.0](https://wiki.wemos.cc/products:retired:d1_mini_pro_v1.1.0) von WEMOS Electronics.
 
 #### 21. August<a name="7"></a>
 Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen. 
@@ -57,7 +57,7 @@ In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
 
   (_Voreinstellungen_ -> _zusätzliche Boardverwalter-URLs_ -> Link einfügen)
 
-- [D1 mini Pro-Treiber](https://wiki.wemos.cc/downloads) installiert
+- [D1 mini Pro-Treiber](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) installiert
 
 Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte nur über das mitgelieferte Example-Sketch die aktuelle und maximale Höhe messen und eine von beiden anzeigen. Wenn möglich soll der neue Höhenmesser mehr können:
 1. aktuelle Höhe auf Display anzeigen
@@ -71,6 +71,7 @@ Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte H�
 <p>
 
 Diesen Beispiel-Code findet man in der Arduino IDE unter 
+
 _Datei_ -> _Beispiele_ -> _BMP180_ -> _Examples_ -> _BMP180_altitude_example_
 
 ```
