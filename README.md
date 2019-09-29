@@ -283,13 +283,13 @@ Heute konnten wir endlich testen, ob wir den Sensor richtig verkabelt haben. Daf
 
 In Text-Form: _Werkzeuge_ -> _Serieller Monitor_
 
-![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Anmerkung%202019-09-29%20102315.png?raw=true)
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Serieller%20Monitor.png?raw=true)
 
 Als Graph: _Werkzeuge_ -> _Serieller Plotter_
 
 (Diese Funktion ist neu, vor vier Jahren brauchten wir für die graphische Darstellung noch ein extra Processing-Skript.)
 
-![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123.png?raw=true)
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Serieller%20Plotter.png?raw=true)
 
 _Blau: Höhe in Meter_
 _Rot: Höhe in feet_
@@ -516,7 +516,7 @@ Dabei haben wir die vorgegebene Höhe (Boulder, Colorado: 1655 Meter) auf 0 gese
 ```
 Danach wurde uns allerdings erstmal trotz Bewegung dauerhaft die Höhe 0 angezeigt:
 
-![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123123r34.png)
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Example%20Sketch%202.png?raw=true)
 
 Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und die Bewegungen kleiner als 1 Meter waren, weshalb keine neue Höhe angezeigt wurde.
 
