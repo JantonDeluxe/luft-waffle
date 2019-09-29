@@ -59,16 +59,9 @@ In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
 
 - [D1 mini Pro-Treiber](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) installiert
 
-Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte bis dato nur über das mitgelieferte Example-Sketch ([siehe unten](#1999)) die aktuelle und maximale Höhe messen und eine von beiden auf den Anzeigen darstellen. Wenn möglich soll der neue Höhenmesser mehr können:
-1. aktuelle Höhe auf Display anzeigen
-2. maximale Höhe möglichst auf unter 1 Meter genau auf Display anzeigen
-3. Temperatur und Druckwerte auf Display anzeigen
-4. Daten auf Webserver anzeigen
-5. Geschwindigkeit und Beschleunigung ausrechnen
-6. Flugverlauf grafisch darstellen
-1
-[Example Sketch](#1999)
-<details><summary>BMP180_altitude_example</summary>
+Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser sollte über das zum Sensor gehörende Example-Sketch (siehe unten) die aktuelle und maximale Höhe messen/berechnen und eine von beiden auf den Anzeigen darstellen. Zusätzlich konnte die maximale Höhe durch das Blinken der im Arduino eingebauten LED ausgegeben werden. Das funktioniert, ist aber nicht sehr "nutzerfreundlich". Der Code ist leider in den vier Jahren verloren gegangen, basierte aber bis auf das Blinken der LED auf dem Example Sketch: 
+
+<details><summary>Example Sketch</summary>
 <p>
 
 Diesen Beispiel-Code findet man in der Arduino IDE unter 
@@ -247,9 +240,21 @@ double getPressure()
 </p>
 </details>
 
+Wenn möglich soll der neue Höhenmesser mehr können:
+1. aktuelle Höhe auf Display anzeigen
+2. maximale Höhe möglichst auf unter 1 Meter genau auf Display anzeigen
+3. Temperatur und Druckwerte auf Display anzeigen
+4. Daten auf Webserver anzeigen
+5. Geschwindigkeit und Beschleunigung ausrechnen
+6. Flugverlauf grafisch darstellen
+
 
 #### 22. August<a name="8"></a>
-Heute haben wir den Höhenmsser (ein [Bosch BMP 180-Sensor](https://www.sparkfun.com/products/retired/11824)) mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) mit dem Mikrocontroller auf einem Breadboard verkabelt. Dann wollten wir das Example-Sketch auf den Mikrocontroller laden, was leider nicht funktioniert hat:
+Heute haben wir den Höhenmsser (ein [Bosch BMP 180-Sensor](https://www.sparkfun.com/products/retired/11824)) mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) mit dem Mikrocontroller auf einem Breadboard verkabelt.
+
+Übersicht; welcher Pin wohin ;)
+
+Dann wollten wir zum Testen das Example-Sketch auf den Mikrocontroller laden, was leider nicht funktioniert hat:
 ```
 esptool.FatalError: Timed out waiting for packet headed
 
@@ -274,6 +279,16 @@ Sehr geholfen haben uns bei der Installation diesese beiden Tutorials:
 Wenn wir diesen Schritt nicht vergessen hätten, hätte das Hochladen des Programms trotzdem nicht funktioniert, da auf der Hersteller-Website des D1 eine veraltete Boardverwalter-URL angegeben war, was uns nur durch Zufall aufgefallen ist. 
 
 #### 28.August<a name="10"></a>
+Heute konnten wir endlich testen, ob wir den Sensor richtig verkabelt haben. Dafür haben wir das oben erwähnte Example Sketch auf den D1 hochgeladen und die Daten ausgelsen. Das funktioniert so:
+In Text-Form: _Werkzeuge_ -> _Serieller Monitor_
+
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Anmerkung%202019-09-29%20102315.png?raw=true)
+
+Als Graph: _Werkzeuge_ -> _Serieller Plotter_
+
+![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123.png?raw=true)
+
+
 An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
 
 Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
