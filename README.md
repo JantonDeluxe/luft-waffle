@@ -865,8 +865,11 @@ Die veränderlichen Teile der Anzeige stehen im Hauptteil des Codes:
     oled.println(" C");
 ```
 Die Anzeige sieht jetzt so aus:
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/neues%20layout.jpg?raw=true)
+
 
 *** 
+
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
