@@ -59,7 +59,7 @@ In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
 
 - [D1 mini Pro-Treiber](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) installiert
 
-Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser sollte über das zum Sensor gehörende Example-Sketch (siehe unten) die aktuelle und maximale Höhe messen/berechnen und eine von beiden auf den Anzeigen darstellen. Zusätzlich konnte die maximale Höhe durch das Blinken der im Arduino eingebauten LED ausgegeben werden. Das funktioniert, ist aber nicht sehr "nutzerfreundlich". Der Code ist leider in den vier Jahren verloren gegangen, basierte aber bis auf das Blinken der LED auf dem Example Sketch: 
+Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser sollte über das zum Sensor gehörende Example-Sketch (siehe unten) die aktuelle messen und auf den Anzeigen darstellen. Zusätzlich konnte die maximale Höhe berechnet werden und durch das Blinken der im Arduino eingebauten LED ausgegeben werden. Das funktioniert, ist aber nicht sehr "nutzerfreundlich". Der Code ist leider in den vier Jahren verloren gegangen, basierte aber bis auf das Berechnen des Maximalwerts und dem Blinken der LED auf dem Example Sketch: 
 
 <details><summary>Example Sketch</summary>
 <p>
@@ -601,10 +601,148 @@ void loop() {
 </p>
 </details>
 
-Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
-
 #### 11. September<a name="12"></a>
-Arduino-Tutorial
+Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. Dafür haben wir die beiden Testprogramme ersteinmal kombiniert und teilweise übersetzt:
+
+<details><summary>Kombiniertes Programm</summary>
+<p>
+  
+```
+// Libraries
+#include <SFE_BMP180.h>
+#include <Wire.h>
+#include <SSD1306Ascii.h> 
+#include <SSD1306AsciiWire.h>
+
+// Objekte
+SFE_BMP180 pressure;      // Objekt mit dem Namen "pressure" (wird für die Benutzung der Library benötigt)
+SSD1306AsciiWire oled;
+
+// Adresse des Displays auf 0x3C setzen
+#define I2C_ADDRESS 0x3C
+
+// Variable
+double baseline;
+
+//Setup
+void setup() {
+  //Display-Setup
+  Wire.begin();
+  oled.begin(&Adafruit128x64, I2C_ADDRESS);
+  oled.set400kHz();
+  oled.setFont(font5x7);
+  oled.clear();
+  oled.set2X();               
+  oled.println("START");
+  oled.set1X();
+  delay(1000);
+
+  //Sensor-Setup
+  if (pressure.begin())
+    oled.println("BMP180 gefunden!");
+  else
+  {
+    oled.println("BMP180 fehlt!");
+    while(1);
+  }
+
+  delay(1000);
+  
+  // baseline-Druck messen
+  baseline = getPressure();
+
+  //baseline-Druck anzeigen
+  oled.clear();
+  oled.println("baseline-Druck: ");
+  oled.println(baseline);
+  oled.println(" mb");  
+
+  delay(1000);
+}
+
+// Hauptcode
+void loop() {
+  double a,P;
+  
+  // Druck messen
+  P = getPressure();
+
+  //Höhenunterschied anzeigen
+  a = pressure.altitude(P,baseline);
+  
+  oled.clear();
+  oled.println("Hoehe: ");
+  if (a >= 0.0) Serial.print(" ");
+  oled.println(a,1);
+  oled.println(" Meter ");
+ 
+  delay(500);
+}
+
+
+// Funktion getPressure() definieren
+double getPressure()
+{
+  char status;
+  double T,P,p0,a;
+
+  // You must first get a temperature measurement to perform a pressure reading.
+  
+  // Start a temperature measurement:
+  // If request is successful, the number of ms to wait is returned.
+  // If request is unsuccessful, 0 is returned.
+
+  status = pressure.startTemperature();
+  if (status != 0)
+  {
+    // Wait for the measurement to complete:
+
+    delay(status);
+
+    // Retrieve the completed temperature measurement:
+    // Note that the measurement is stored in the variable T.
+    // Use '&T' to provide the address of T to the function.
+    // Function returns 1 if successful, 0 if failure.
+
+    status = pressure.getTemperature(T);
+    if (status != 0)
+    {
+      // Start a pressure measurement:
+      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
+      // If request is successful, the number of ms to wait is returned.
+      // If request is unsuccessful, 0 is returned.
+
+      status = pressure.startPressure(3);
+      if (status != 0)
+      {
+        // Wait for the measurement to complete:
+        delay(status);
+
+        // Retrieve the completed pressure measurement:
+        // Note that the measurement is stored in the variable P.
+        // Use '&P' to provide the address of P.
+        // Note also that the function requires the previous temperature measurement (T).
+        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
+        // Function returns 1 if successful, 0 if failure.
+
+        status = pressure.getPressure(P,T);
+        if (status != 0)
+        {
+          return(P);
+        }
+        else oled.println("error retrieving pressure measurement\n");
+      }
+      else oled.println("error starting pressure measurement\n");
+    }
+    else oled.println("error retrieving temperature measurement\n");
+  }
+  else oled.println("error starting temperature measurement\n");
+}
+```
+</p>
+</details>
+
+
 
 #### 12. September<a name="13"></a
  Arduino-Tutorial
