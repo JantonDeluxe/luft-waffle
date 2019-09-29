@@ -637,6 +637,7 @@ void setup() {
   oled.println("START");
   oled.set1X();
   delay(1000);
+  oled.clear();
 
   //Sensor-Setup
   if (pressure.begin())
@@ -742,8 +743,6 @@ double getPressure()
 ```
 </p>
 </details>
-
-Das ganze hat sehr gut funktioniert:
 
 <details><summary>Display-Fotos</summary>
 <p>
