@@ -59,14 +59,14 @@ In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
 
 - [D1 mini Pro-Treiber](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) installiert
 
-Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte nur über das mitgelieferte Example-Sketch die aktuelle und maximale Höhe messen und eine von beiden anzeigen. Wenn möglich soll der neue Höhenmesser mehr können:
+Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte bis dato nur über das mitgelieferte Example-Sketch ([siehe unten](#1999)) die aktuelle und maximale Höhe messen und eine von beiden auf den Anzeigen darstellen. Wenn möglich soll der neue Höhenmesser mehr können:
 1. aktuelle Höhe auf Display anzeigen
 2. maximale Höhe möglichst auf unter 1 Meter genau auf Display anzeigen
 3. Temperatur und Druckwerte auf Display anzeigen
 4. Daten auf Webserver anzeigen
 5. Geschwindigkeit und Beschleunigung ausrechnen
 6. Flugverlauf grafisch darstellen
-
+[ ](#1999)
 <details><summary>Example Sketch</summary>
 <p>
 
