@@ -286,6 +286,7 @@ In Text-Form: _Werkzeuge_ -> _Serieller Monitor_
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Anmerkung%202019-09-29%20102315.png?raw=true)
 
 Als Graph: _Werkzeuge_ -> _Serieller Plotter_
+
 (Diese Funktion ist neu, vor vier Jahren brauchten wir für die graphische Darstellung noch ein extra Processing-Skript.)
 
 ![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123.png?raw=true)
@@ -293,15 +294,7 @@ Als Graph: _Werkzeuge_ -> _Serieller Plotter_
 _Blau: Höhe in Meter_
 _Rot: Höhe in feet_
 
-Die Verkabelung ist also korrekt. Aus Spaß haben wir dann noch das zweite Example Sketch (siehe unten), das eigentlich für Wettermessungen gedacht ist ausprobiert. Dabei haben wir die vorgegebene Höhe (Boulder, Colorado: 1655 Meter) auf 0 gesetzt, um die gesuchte relative Höhe zu erhalten:
-```
-#define ALTITUDE 0
-```
-Danach wurde uns allerdings erstmal trotz Bewegung dauerhaft die Höhe 0 angezeigt:
-
-![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123123r34.png)
-
-
+Die Verkabelung ist also korrekt. Aus Spaß haben wir dann noch das zweite Example Sketch, das eigentlich für Wettermessungen gedacht ist ausprobiert: 
 
 <details><summary>Example Sketch 2</summary>
 <p>
@@ -517,10 +510,17 @@ void loop()
 </p>
 </details>
 
-An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
+Dabei haben wir die vorgegebene Höhe (Boulder, Colorado: 1655 Meter) auf 0 gesetzt, um die gesuchte relative Höhe zu erhalten:
+```
+#define ALTITUDE 0.0
+```
+Danach wurde uns allerdings erstmal trotz Bewegung dauerhaft die Höhe 0 angezeigt:
 
-Heute haben wir den Zeitraum gemessen, indem die Messwerte unseren Start-Schwellwert von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, wird spätestens alle 10 Minuten eine Rekalibrierung vorgenommen wird, um einen neuen Nullwert zu errechnen.
+![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123123r34.png)
 
+Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und die Bewegungen kleiner als 1 Meter waren, weshalb keine neue Höhe angezeigt wurde.
+
+Mit dem ersten Example Skecth haben wir dann den Zeitraum gemessen, in dem die Messwerte eine Ungenauigkeit von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, sollte also etwa alle 10 Minuten eine Rekalibrierung vorgenommen werden, um einen neuen Nullwert zu errechnen.
 
 #### 29.August<a name="11"></a>
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
