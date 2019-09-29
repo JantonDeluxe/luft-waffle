@@ -23,7 +23,6 @@
 
 ## Unterrichtstagebuch <a name="2"></a>
 
-***
 #### 13. August 2019<a name="3"></a>
 In unserer ersten Informatikstunde haben wir uns überlegt, was für Projekte wir gerne machen würden und auf [code.org](https://code.org/) mit einem Einsteiger-Kurs angefangen.
 Unsere Vorkenntnisse sind auf einfache Programmieraufgaben mit [Scratch](https://de.wikipedia.org/wiki/Scratch_(Programmiersprache)) im Rahmen des Jugendwettbewerbs Informatik beschränkt.
@@ -34,7 +33,7 @@ Für die Website benutzen wir vorläufig das [Jekyll](https://jekyllrb.com/)-The
 ***
 #### 15. August 2019<a name="5"></a>
 Heute haben wir uns für ein Arduino-Projekt entschieden und dafür angefangen, uns mit dem [Arduino](https://arduino.cc) und der Programmiersprache [C](https://de.wikipedia.org/wiki/C_(Programmiersprache)) auseinanderzusetzten. Ebenfalls haben wir Links in unsere Website eingefügt und weiterüberlegt, wie wir am besten lernen und was für ein Projekt genau wir umsetzen wollen.
-
+***
 #### 20. August 2019<a name="6"></a>
 Am Wochenende hatten wir uns dafür entschieden, einen Höhenmesser für Wasserraketen zu bauen. Diese Art von Höhenmesser kostet off-the-shelf mindestens 50 €, weshalb wir Geld sparen und den Sensor selbst bauen wollen. Basieren tut der Höhenmesser auf einem Versuch, den ich, Anton, vor vier Jahren mit meinem Vater unternommen habe. 
 
@@ -47,7 +46,7 @@ Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-un
 ![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
 
 Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein 128×64 Pixel GM009605 OLED-Display mit SSD1306-Controller aus China und das neue Board ein [D1 mini Pro V1.0](https://wiki.wemos.cc/products:retired:d1_mini_pro_v1.1.0) mit ESP8266-Mikrocontroller von WEMOS Electronics.
-
+***
 #### 21. August<a name="7"></a>
 Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen. 
 
@@ -248,8 +247,7 @@ Wenn möglich soll der neue Höhenmesser mehr können:
 4. Daten auf Webserver anzeigen
 5. Geschwindigkeit und Beschleunigung ausrechnen
 6. Flugverlauf grafisch darstellen
-
-
+***
 #### 22. August<a name="8"></a>
 Heute haben wir den Höhenmsser (ein [Bosch BMP 180-Sensor](https://www.sparkfun.com/products/retired/11824)) mit Hilfe des [Sparkfun-Tutorials](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/all) mit dem Mikrocontroller auf einem Breadboard verkabelt.
 
@@ -263,7 +261,7 @@ esptool.FatalError: Timed out waiting for packet headed
 Deshalb haben wir statt der neuen Universal Windows Platform App aus dem Microsoft Store die Arduino IDE diesmal als normales Windows-Programm (über den .exe Installer) installiert, was das Problem aber nicht behoben hat. Sicherheitshalber haben wir deshalb den D1-Treiber ebenfalls neu installiert und weiter nach dem Fehler gesucht.
 
 Parallel haben wir dieses Unterrichtstagebuch fortgeführt.
-
+***
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte: Wir hatten vergessen, das Board engültig zu installieren. Das geht in der Arduino IDE unter
 
@@ -278,7 +276,7 @@ Sehr geholfen haben uns bei der Installation diesese beiden Tutorials:
 - (https://arduino-projekte.info/installation-wemos-d1-mini-lite-wemos-d1-mini-pro/)
 
 Wenn wir diesen Schritt nicht vergessen hätten, hätte das Hochladen des Programms trotzdem nicht funktioniert, da auf der Hersteller-Website des D1 eine veraltete Boardverwalter-URL angegeben war, was uns nur durch Zufall aufgefallen ist. 
-
+***
 #### 28.August<a name="10"></a>
 Heute konnten wir endlich testen, ob wir den Sensor richtig verkabelt haben. Dafür haben wir das oben erwähnte Example Sketch auf den D1 hochgeladen und die Daten ausgelsen. Das funktioniert so:
 
@@ -522,7 +520,7 @@ Danach wurde uns allerdings erstmal trotz Bewegung dauerhaft die Höhe 0 angezei
 Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und die Bewegungen kleiner als 1 Meter waren, weshalb keine neue Höhe angezeigt wurde.
 
 Mit dem ersten Example Skecth haben wir dann den Zeitraum gemessen, in dem die Messwerte eine Ungenauigkeit von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, sollte also etwa alle 10 Minuten eine Rekalibrierung vorgenommen werden, um einen neuen Nullwert zu errechnen.
-
+***
 #### 29.August<a name="11"></a>
 Heute haben wir mit Hilfe dieses  das OLED-Display in Betrieb genommen.
 
@@ -601,7 +599,7 @@ void loop() {
 ```
 </p>
 </details>
-
+***
 #### 11. September<a name="12"></a>
 Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. Dafür haben wir die beiden Testprogramme ersteinmal kombiniert übersetzt und etwas kommentiert:
 
@@ -750,7 +748,7 @@ double getPressure()
 
 </p>
 </details>
-
+***
 #### 12. September<a name="13"></a
 Heute haben wir zunächst die fehlermeldungen getestet und dann Fehlercodes aufgestellt, da die angezeigten Fehlermeldungen zu lang für das Display waren. Dabei haben wir gleich die Beschreibung unseres Codes oben erweitert:
   
@@ -794,7 +792,7 @@ oled.print(highest);
 oled.print("m");
 ```
 Das ganze funktioniert sehr gut, sieht aber nicht gut aus. Deshalb haben wir angefangen, uns zu überlegen, wie ein besseres Layout aussehen könnte.
-
+***
 #### 24. September<a name="14"></a>
 Heute haben wir für das neue Layout für die Temperatur-Anzeige angefangen. Dafür haben wir eine neue Variable deklariert:
 ```
@@ -802,7 +800,7 @@ double T;           // Temperatur
 ```
 In unseren ersten Versuchen wurde erstmal nur die Temperatur zum Start-Zeitpunkt angezeigt. Das wäre akzeptabel, aber nicht das, was wir eigentlich wollen.
 Dann haben wir versucht mit Hilfe von Pointern die Temperatur aus der Definition von getPressure() zu verwenden, was elegant, aber für uns auch sehr zeitaufwändig war: Kurz vor Ende der Stunde waren wir fertig, das ganze hat jedoch nicht funktioniert hat, weil die Library dafür nicht ausgelegt ist.
-
+***
 #### 25. September<a name="15"></a>
 Heute haben wir das Temperatur-Problem auf eine relativ einfache Weise gelöst. Statt T aus der Definition von getPressure() direkt zu verwenden, haben wir die Temperaturmessung aus getPressure() kopiert und vereinfacht. Zunächst haben wir die Variable status als char deklariert:
 ```
@@ -822,7 +820,7 @@ oled.setCursor(0, 5);          // Cursor unter die Maximumanzeige bewegen
     oled.print(T);
     oled.print(" C");
 ```
-
+***
 #### 26. September<a name="16"></a>
 Heute haben wir das neue Layout gebaut. Der baseline-Druck steht weiterhin oben rechts, jetzt aber in einer Reihe und mit der Einheit mbar statt mb:
 ```
@@ -866,7 +864,7 @@ Die veränderlichen Teile der Anzeige stehen im Hauptteil des Codes:
 ```
 Die Anzeige sieht jetzt so aus:
 
- 
+*** 
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
