@@ -523,13 +523,54 @@ Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und
 Mit dem ersten Example Skecth haben wir dann den Zeitraum gemessen, in dem die Messwerte eine Ungenauigkeit von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, sollte also etwa alle 10 Minuten eine Rekalibrierung vorgenommen werden, um einen neuen Nullwert zu errechnen.
 
 #### 29.August<a name="11"></a>
-Heute haben wir mit Hilfe dieses [Tutorials](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/) das OLED-Display in Betrieb genommen.
+Heute haben wir mit Hilfe dieses  das OLED-Display in Betrieb genommen.
 
 Übersicht welcher Pin wohin
 
-![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Zusammengesteckt%20auf%20Breadboard.jpeg?raw=true)
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Zusammengesteckt%20auf%20Breadboard1.jpeg?raw=true)
 
-Nachdem das Display verkabelt war mussten wir die I2C-Adresse des Dispalys herausfinden, um es später auch ansteuern zu können. Dafür gibt es den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und einem dann die Adresse des Displays ausgibt.
+Nachdem das Display verkabelt war mussten wir für unser testprogramm die nun die benötigten Libraries installieren:
+```
+#include <Wire.h>             // Arduino-Standard-Library für die Datenübertragung (I2C)
+#include <SSD1306Ascii.h>     // Library für die Buchstabendarstellung auf dem Display
+#include <SSD1306AsciiWire.h> // Library für die Übertragung auf das OLED-Display 
+```
+Damit die Library SSD1306AsciiWire funktioniert muss man ein Objekt mit dem Namen "oled" initialisieren:
+```
+SSD1306AsciiWire oled;
+```
+Um das Display später auch ansteuern zu können, muss man die I2C-Adresse des Displays herausfinden. Dabei geholfen hat uns dieses [Tutorial](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/). Für diese Aufgabe gibt es nämlich den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und der einem dann die Adresse des Displays ausgibt. In unserem Fall ist das die Adresse 0x3C. 
+
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/I2c-Scan.png?raw=true)
+Also haben wir die Adresse gesetzt:
+```
+#define I2C_ADDRESS 0x3C
+```
+Jetzt kann das Setup beginnen:
+```
+void setup() {
+Wire.begin();                                // Wire-Protokoll initialisieren (Beginn der Datenübertragung)
+  oled.begin(&Adafruit128x64, I2C_ADDRESS);  // Display initialisieren
+  oled.set400kHz();                          // Datenübertragungsrate setzen
+  oled.setFont(font5x7);                     // Fontgröße setzen
+  oled.clear();                              // Display leeren (sicherheitshalber)
+
+  //???
+ 
+  oled.set2X();                              // Größere Buchstaben
+  oled.println("START");                     // START schreiben
+  oled.set1X();                              // Buchstaben wieder auf Normalgröße
+}
+```
+Das eigentliche Programm besteht dann nur darin, "Hallo!" in großen Buchstaben anzuzeigen:
+```
+void loop() {
+  // put your main code here, to run repeatedly:
+ oled.set2X();                              // Größere Buchstaben
+  oled.println("Hallo!");
+}
+```
+
 
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
