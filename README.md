@@ -53,7 +53,10 @@ Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen
 In der Stunde haben wir angefangen den Laptop für unser Projekt einzurichten:
 - Laptop in iSurf registriert
 - [Arduino IDE](https://www.arduino.cc/en/Guide/Windows) installiert
-- [D1 mini Pro Hardware Package](https://github.com/esp8266/Arduino) über die Arduino IDE installiert (_Voreinstellungen_ -> _zusätzliche Boardverwalter-URLs_ -> Link einfügen)
+- [D1 mini Pro Hardware Package](https://github.com/esp8266/Arduino) über die Arduino IDE installiert 
+
+  (_Voreinstellungen_ -> _zusätzliche Boardverwalter-URLs_ -> Link einfügen)
+
 - [D1 mini Pro-Treiber](https://wiki.wemos.cc/downloads) installiert
 
 Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte Höhenmesser konnte nur über das mitgelieferte Example-Sketch die aktuelle und maximale Höhe messen und eine von beiden anzeigen. Wenn möglich soll der neue Höhenmesser mehr können:
@@ -76,8 +79,14 @@ Parallel haben wir dieses Unterrichtstagebuch fortgeführt.
 
 #### 27. August<a name="9"></a>
 Heute haben wir endlich den Fehler gefunden, warum unser Board nicht mit der Arduino IDE kommunizieren konnte: Wir hatten vergessen, das Board engültig zu installieren. Das geht in der Arduino IDE unter
+
 _Werkzeuge_ -> _Board_ -> _Boardverwalter_ -> Suche “ESP8266” (der ESP8266 ist der auf unserem Board verbaute Mikrocontroller) -> _Installieren_. 
-Zusätzlich muss man für unser spezielles Board weitere Zusatzeinstellungen in den prefrences.txt hinzufügen, wofür es glücklicherweise eine [Vorlage](https://arduino-projekte.info/wp-content/uploads/2017/07/boards.txt) gibt. Dann muss man die Arduino IDE nur noch neustarten und das Board unter _Werkzeuge_ -> _Board_ auswählen. Sehr geholfen haben uns bei der Installation diesese beiden Tutorials: 
+
+Zusätzlich muss man für unser spezielles Board weitere Zusatzeinstellungen in den prefrences.txt hinzufügen, wofür es glücklicherweise eine [Vorlage](https://arduino-projekte.info/wp-content/uploads/2017/07/boards.txt) gibt. Dann muss man die Arduino IDE nur noch neustarten und unter 
+
+_Werkzeuge_ -> _Board_ -> "LOLIN(WEMOS) D1 mini Pro" auswählen.
+
+Sehr geholfen haben uns bei der Installation diesese beiden Tutorials: 
 - (https://arduino-projekte.info/installation-eps8266-modul-wie-z-b-wemos/)
 - (https://arduino-projekte.info/installation-wemos-d1-mini-lite-wemos-d1-mini-pro/)
 
