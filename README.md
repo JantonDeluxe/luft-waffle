@@ -280,13 +280,19 @@ Wenn wir diesen Schritt nicht vergessen hätten, hätte das Hochladen des Progra
 
 #### 28.August<a name="10"></a>
 Heute konnten wir endlich testen, ob wir den Sensor richtig verkabelt haben. Dafür haben wir das oben erwähnte Example Sketch auf den D1 hochgeladen und die Daten ausgelsen. Das funktioniert so:
+
 In Text-Form: _Werkzeuge_ -> _Serieller Monitor_
 
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Anmerkung%202019-09-29%20102315.png?raw=true)
 
 Als Graph: _Werkzeuge_ -> _Serieller Plotter_
+(Diese Funktion ist neu, vor vier Jahren brauchten wir für die graphische Darstellung noch ein extra Processing-Skript.)
 
 ![alt text](https://raw.githubusercontent.com/JantonDeluxe/luft-waffle/master/Anmerkung%202019-09-29%20102315123.png?raw=true)
+_Blau: Höhe in Meter_
+_Rot: Höhe in feet_
+
+Die Verkabelung ist also korrekt.
 
 
 An diesem Tag haben wir begonnen den Arduino zu programmieren und die ersten Daten auszulesen. Dazu haben wir ein Beispielprogramm hochgeladen von der Github-Website des Herstellers und dann die Höhe auf 0 gesetzt. Allerdings hat der Arduino die Höhe dann als Konstante angezeigt.
