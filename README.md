@@ -599,6 +599,7 @@ void loop() {
 ```
 </p>
 </details>
+
 ***
 #### 11. September<a name="12"></a>
 Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. Dafür haben wir die beiden Testprogramme ersteinmal kombiniert übersetzt und etwas kommentiert:
@@ -748,6 +749,7 @@ double getPressure()
 
 </p>
 </details>
+
 ***
 #### 12. September<a name="13"></a
 Heute haben wir zunächst die fehlermeldungen getestet und dann Fehlercodes aufgestellt, da die angezeigten Fehlermeldungen zu lang für das Display waren. Dabei haben wir gleich die Beschreibung unseres Codes oben erweitert:
