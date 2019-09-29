@@ -66,8 +66,9 @@ Ebenfalls haben wir Zielsetzungen für den Höhenmesser aufgestellt. Der alte H�
 4. Daten auf Webserver anzeigen
 5. Geschwindigkeit und Beschleunigung ausrechnen
 6. Flugverlauf grafisch darstellen
-[ ](#1999)
-<details><summary>Example Sketch</summary>
+1
+[Example Sketch](#1999)
+<details><summary>BMP180_altitude_example</summary>
 <p>
 
 Diesen Beispiel-Code findet man in der Arduino IDE unter 
