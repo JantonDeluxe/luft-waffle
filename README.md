@@ -45,7 +45,7 @@ Dieser [alte Höhenmesser](http://jan.krummrey.de/2015/09/13/hoehenmesser-fur-un
 
 ![Alter Höhenmesser](https://i1.wp.com/jan.krummrey.de/wp-content/uploads/2015/09/11951281_10153345040958153_9145140276330392700_n.jpg)
 
-Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein No-Name-OLED-Display aus China und das neue Board ein [D1 mini Pro V1.0](https://wiki.wemos.cc/products:retired:d1_mini_pro_v1.1.0) von WEMOS Electronics.
+Wir haben uns also dafür entschieden, ein hochauflösenderes Display statt den 7-Segmentanzeigen und ein Board mit WLAN und mehr Speicherplatz zu verwenden. Das Display ist nun ein 128×64 Pixel GM009605 OLED-Display mit SSD1306-Controller aus China und das neue Board ein [D1 mini Pro V1.0](https://wiki.wemos.cc/products:retired:d1_mini_pro_v1.1.0) mit ESP8266-Mikrocontroller von WEMOS Electronics.
 
 #### 21. August<a name="7"></a>
 Zuhause haben wir die Aufgaben 1 bis 4 von StarlogoTNG erfolgreich abgeschlossen. 
@@ -523,6 +523,14 @@ Letzlich lag das daran, dass die Höhe nur in ganzen Zahlen ausgegeben wurde und
 Mit dem ersten Example Skecth haben wir dann den Zeitraum gemessen, in dem die Messwerte eine Ungenauigkeit von 2 Metern übersteigen. Der Zeitraum beträgt 18 Minuten. Um sicher zugehen, dass die Abweichung nicht zu groß wird, sollte also etwa alle 10 Minuten eine Rekalibrierung vorgenommen werden, um einen neuen Nullwert zu errechnen.
 
 #### 29.August<a name="11"></a>
+Heute haben wir mit Hilfe dieses [Tutorials](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/) das OLED-Display in Betrieb genommen.
+
+Übersicht welcher Pin wohin
+
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Zusammengesteckt%20auf%20Breadboard.jpeg?raw=true)
+
+Nachdem das Display verkabelt war mussten wir die I2C-Adresse des Dispalys herausfinden, um es später auch ansteuern zu können. Dafür gibt es den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und einem dann die Adresse des Displays ausgibt.
+
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
 #### 11. September<a name="12"></a>
