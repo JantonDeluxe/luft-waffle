@@ -539,7 +539,7 @@ Damit die Library SSD1306AsciiWire funktioniert muss man ein Objekt mit dem Name
 ```
 SSD1306AsciiWire oled;    
 ```
-Um das Display später auch ansteuern zu können, muss man die I2C-Adresse des Displays herausfinden. Dabei geholfen hat uns dieses [Tutorial](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/). Für diese Aufgabe gibt es nämlich den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und der einem dann die Adresse des Displays ausgibt. In unserem Fall ist das die Adresse 0x3C. 
+Um das Display später auch ansteuern zu können, muss man die I2C-Adresse des Displays herausfinden. Dabei geholfen hat uns dieses [Tutorial](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/). Für diese Aufgabe gibt es nämlich den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und der einem dann die Adresse des Displays ausgibt. In unserem Fall ist das die Adresse 0x3C (vorher hatten wir den Sensor abgesteckt, damit uns nur die Adresse des Displays angezeigt wird). 
 
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/I2c-Scan.png?raw=true)
 
@@ -566,9 +566,13 @@ void loop() {
  oled.set2X();                              // Größere Buchstaben
   oled.println("Hallo!");                   // "Hallo!" schreiben
 }
+```
+Und das hat funktioniert:
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/hallo!.jpeg?raw=true)
 
 <details><summary>Ganzes Test-Programm</summary>
 <p>
+  
 ```
 #include <Wire.h>
 #include <SSD1306Ascii.h> 
@@ -596,6 +600,7 @@ void loop() {
 ```
 </p>
 </details>
+
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
 #### 11. September<a name="12"></a>
