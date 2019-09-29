@@ -742,10 +742,12 @@ double getPressure()
 ```
 </p>
 </details>
-![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/start.jpeg?raw=true)
+
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Start.jpeg?raw=true)
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/BMP.jpeg?raw=true)
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Druck.jpeg?raw=true)
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/Hoehe.jpeg?raw=true)
+
 #### 12. September<a name="13"></a
 Heute haben wir
 
