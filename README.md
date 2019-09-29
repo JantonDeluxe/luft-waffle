@@ -537,14 +537,15 @@ Nachdem das Display verkabelt war mussten wir für unser testprogramm die nun di
 ```
 Damit die Library SSD1306AsciiWire funktioniert muss man ein Objekt mit dem Namen "oled" initialisieren:
 ```
-SSD1306AsciiWire oled;
+SSD1306AsciiWire oled;    
 ```
 Um das Display später auch ansteuern zu können, muss man die I2C-Adresse des Displays herausfinden. Dabei geholfen hat uns dieses [Tutorial](https://www.instructables.com/id/Monochrome-096-i2c-OLED-display-with-arduino-SSD13/). Für diese Aufgabe gibt es nämlich den [I2C-Scanner](https://playground.arduino.cc/Main/I2cScanner/), den man auf das Board lädt und der einem dann die Adresse des Displays ausgibt. In unserem Fall ist das die Adresse 0x3C. 
 
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/I2c-Scan.png?raw=true)
+
 Also haben wir die Adresse gesetzt:
 ```
-#define I2C_ADDRESS 0x3C
+#define I2C_ADDRESS 0x3C 
 ```
 Jetzt kann das Setup beginnen:
 ```
@@ -554,9 +555,6 @@ Wire.begin();                                // Wire-Protokoll initialisieren (B
   oled.set400kHz();                          // Datenübertragungsrate setzen
   oled.setFont(font5x7);                     // Fontgröße setzen
   oled.clear();                              // Display leeren (sicherheitshalber)
-
-  //???
- 
   oled.set2X();                              // Größere Buchstaben
   oled.println("START");                     // START schreiben
   oled.set1X();                              // Buchstaben wieder auf Normalgröße
@@ -565,13 +563,39 @@ Wire.begin();                                // Wire-Protokoll initialisieren (B
 Das eigentliche Programm besteht dann nur darin, "Hallo!" in großen Buchstaben anzuzeigen:
 ```
 void loop() {
-  // put your main code here, to run repeatedly:
  oled.set2X();                              // Größere Buchstaben
+  oled.println("Hallo!");                   // "Hallo!" schreiben
+}
+
+<details><summary>Ganzes Test-Programm</summary>
+<p>
+```
+#include <Wire.h>
+#include <SSD1306Ascii.h> 
+#include <SSD1306AsciiWire.h>
+
+SSD1306AsciiWire oled;
+
+#define I2C_ADDRESS 0x3C
+
+void setup() {
+ Wire.begin();
+  oled.begin(&Adafruit128x64, I2C_ADDRESS);
+  oled.set400kHz();
+  oled.setFont(font5x7);
+  oled.clear();
+  oled.set2X();               
+  oled.println("START");
+  oled.set1X();   
+}
+
+void loop() {
+ oled.set2X();
   oled.println("Hallo!");
 }
 ```
-
-
+</p>
+</details>
 Am Donnerstag haben wir das Problem mit der Höhe behoben und die Auslesung der Daten so programmiert, dass sie uns geordnet angezeigt werden.
 
 #### 11. September<a name="12"></a>
