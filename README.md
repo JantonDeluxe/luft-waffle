@@ -615,7 +615,7 @@ Heute haben wir angefangen, Daten vom Höhenmesser auf dem Display anzuzeigen. D
 #include <SSD1306AsciiWire.h>
 
 // Objekte
-SFE_BMP180 pressure;      // Objekt mit dem Namen "pressure" (wird für die Benutzung der Library benötigt)
+SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
 
 // Adresse des Displays auf 0x3C setzen
