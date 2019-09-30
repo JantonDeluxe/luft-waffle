@@ -890,7 +890,7 @@ void setup(){
 void loop(){}
 ```
 
-Verbindung herstellen mit dem Sketch, der in der Dokumentation der ESP8266WiFi-Library (QUELLE!!!) vorgeschlagen wird. Dabei ist es wichtig als Board "Generic ESP8266 Module" auszuwählen. :
+Verbindung herstellen mit dem Sketch, der in der [Dokumentation der ESP8266WiFi-Library](https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html) vorgeschlagen wird:
 ```
 #include <ESP8266WiFi.h>
 
@@ -918,6 +918,97 @@ void loop() {
 }
 ```
 Das ist die ausgegebene IP-Adresse:
+
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/xyz?raw=true)
+
+Das ist natürlich nur eine temporäre Lösung das Board in einem existierenden Netzwerk anzusteuern. Zum einen kann man den Höhenmesser dann nur an Orten mit funktionierender WLAN-Verbindung nutzen (also nicht draußen auf dem Feld!), zum anderen ist das ESP2866-Modul nicht sehr sicher, bietet also ein potentielles Einfallstor an der Firewall vorbei. Das Ziel ist also, dass der Höhenmesser sein eigenes Netzwerk erstellt, mit dem sich der Client dann verbinden kann. Erstmal haben wir dann aber einen Webserver mit Hilfe des Beispiels der Library aufgesetzt:
+```
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
+
+#ifndef STASSID
+#define STASSID "MyNetwork"
+#define STAPSK  "------."
+#endif
+
+const char* ssid = STASSID;
+const char* password = STAPSK;
+
+ESP8266WebServer server(80);
+
+const int led = 13;
+
+void handleRoot() {
+  digitalWrite(led, 1);
+  server.send(200, "text/plain", "Hoehenmesser");
+  digitalWrite(led, 0);
+}
+
+void handleNotFound() {
+  digitalWrite(led, 1);
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET) ? "GET" : "POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  for (uint8_t i = 0; i < server.args(); i++) {
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  server.send(404, "text/plain", message);
+  digitalWrite(led, 0);
+}
+
+void setup(void) {
+  pinMode(led, OUTPUT);
+  digitalWrite(led, 0);
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.println("");
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  if (MDNS.begin("esp8266")) {
+    Serial.println("MDNS responder started");
+  }
+
+  server.on("/", handleRoot);
+
+  server.on("/inline", []() {
+    server.send(200, "text/plain", "this works as well");
+  });
+
+  server.onNotFound(handleNotFound);
+
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
+void loop(void) {
+  server.handleClient();
+  MDNS.update();
+}
+```
+Das Ergebnis sieht dann so aus:
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/WebServer1?raw=true)
+
+Diesen einfachen Webserver haben wir dann in den Code integriert und getestet, ob Kompatibilitätsprobleme auftreten. Das war nicht der Fall.
+
+
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
