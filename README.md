@@ -1004,7 +1004,7 @@ void loop(void) {
 }
 ```
 Das Ergebnis sieht dann so aus:
-![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/WebServer1?raw=true)
+![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/WebServer1.png?raw=true)
 
 Diesen einfachen Webserver haben wir dann in den Code integriert und getestet, ob Kompatibilitätsprobleme auftreten. Das war nicht der Fall.
 
