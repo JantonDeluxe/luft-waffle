@@ -865,11 +865,64 @@ Die veränderlichen Teile der Anzeige stehen im Hauptteil des Codes:
     oled.println(" C");
 ```
 Die Anzeige sieht jetzt so aus:
+
 ![alt text](https://github.com/JantonDeluxe/luft-waffle/blob/master/Bilder/neues%20layout2.jpg?raw=true)
 
-
+Damit haben wir die ersten drei unserer Ziele erreicht.
 *** 
+#### 1. Oktober<a name="17"></a>
+Webserver
+Macadresse des Boards im seriellen Monitor anzeigen, um es dann in iSurf freizuschalten ([Quelle](https://techtutorialsx.com/2017/04/09/esp8266-get-mac-address/)):
+```
+#include <ESP8266WiFi.h>
+ 
+void setup(){
+ 
+   Serial.begin(115200);
+   delay(500);
+ 
+   Serial.println();
+   Serial.print("MAC: ");
+   Serial.println(WiFi.macAddress());
+ 
+}
+ 
+void loop(){}
+```
 
+Verbindung herstellen mit dem Sketch, der in der Dokumentation der ESP8266WiFi-Library (QUELLE!!!) vorgeschlagen wird. Dabei ist es wichtig als Board "Generic ESP8266 Module" auszuwählen. :
+```
+/* Webserver-Test
+   --------------
+   Das ist ein Webserver-Testprogramm!
+*/
+
+#include <ESP8266WiFi.h>
+
+void setup() {
+  
+  Serial.begin(115200);
+  Serial.println();
+
+  WiFi.begin("MyNetwork", "----------");  // aus Sicherheitsgründen zensiert
+
+  Serial.print("Connecting");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+
+  Serial.print("Connected, IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+
+}
+```
+Das ist die ausgegebene IP-Adresse:
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
