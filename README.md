@@ -892,11 +892,6 @@ void loop(){}
 
 Verbindung herstellen mit dem Sketch, der in der Dokumentation der ESP8266WiFi-Library (QUELLE!!!) vorgeschlagen wird. Dabei ist es wichtig als Board "Generic ESP8266 Module" auszuwählen. :
 ```
-/* Webserver-Test
-   --------------
-   Das ist ein Webserver-Testprogramm!
-*/
-
 #include <ESP8266WiFi.h>
 
 void setup() {
