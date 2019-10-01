@@ -21,7 +21,11 @@ void handleRoot() {
   digitalWrite(led, 0);
 }
 
-// test
+/* 
+window.setInterval(function() {
+  // update
+}, 3000);
+*/
 
 void handleNotFound() {
   digitalWrite(led, 1);
