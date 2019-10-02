@@ -18,7 +18,7 @@
   V10 Mike Grusin, SparkFun Electronics 10/24/2013
   V1.1.2 Updates for Arduino 1.6.4 5/2015
 
-  Basiert teilweise auf dem Sketch WiFiAccesPoint aus der ESP8266WebServer-Library:
+  Basiert teilweise auf dem Sketch WiFiAccessPoint aus der ESP8266WebServer-Library:
   Copyright (c) 2015, Majenko Technologies
 */
 
