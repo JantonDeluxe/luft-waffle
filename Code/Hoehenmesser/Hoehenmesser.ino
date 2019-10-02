@@ -126,7 +126,6 @@ void setup(void) {
 
     // Webserver
     server.handleClient();
-    MDNS.update();
     
     // Druck messen
     P = getPressure();
