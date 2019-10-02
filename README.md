@@ -1010,7 +1010,7 @@ Das Ergebnis sieht dann so aus:
 Diesen einfachen Webserver haben wir dann in den Code integriert und getestet, ob Kompatibilitätsprobleme auftreten. Das war nicht der Fall. Dann haben wir s
 
 #### 2. Oktober<a name="18"></a>
-
+Heute haben wir den unnötigen Code aus dem Webserver-Beispiel gestrichen. Das Board erstellt jetzt ebenfals sein eigenes Netzwerk und ist nicht mehr auf ein bestehendes Netzwerk angewiesen. Außerdem haben wir ein Darstellungsproblem der IP-Adresse auf dem OLED-Display behoben.
 
 You can use the  to maintain and preview the content for your website in Markdown files.
 
