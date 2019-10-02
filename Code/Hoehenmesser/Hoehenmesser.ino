@@ -54,9 +54,6 @@ const char *password = APPSK;
 // Webserver-Port setzen
 ESP8266WebServer server(80);
 
-// wofür genau?
-const int led = 13;
-
 // Text schreiben
 void handleRoot() {
   server.send(200, "text/plain", "Hoehenmesser"); //wie wechsel ich die Zeilen?
@@ -103,9 +100,6 @@ void setup(void) {
  oled.print("Hoehe:");
  oled.setCursor(0,5);
  oled.print("Max:");
-
-    
- delay(100);
 
   // Webserver-Setup
   Serial.begin(115200);
@@ -155,13 +149,13 @@ void setup(void) {
     oled.setCursor(40, 2);               // Cursor bewegen
     if (a >= 0.0) oled.print(" ");       // Leerzeichen, wenn positive Zahl
     oled.print(a);
-    oled.print("m");
+    oled.print(" m");
 
     // Maximum anzeigen
     oled.setCursor(40, 4);               // Cursor unter die Höhenanzeige bewegen
     if (highest >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
     oled.print(highest);
-    oled.print("m");
+    oled.print(" m");
     oled.set1X();
 
     // Temperaturanzeige
@@ -172,7 +166,7 @@ void setup(void) {
     // IP-Adresse anzeigen
     oled.setCursor(0, 7);
     oled.print("IP: ");
-    oled.print(WiFi.localIP());
+    oled.print(WiFi.softAPIP());
     
     delay(500);
   }
