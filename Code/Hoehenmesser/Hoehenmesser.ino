@@ -14,9 +14,12 @@
   3 - Fehler beim Erhalten der Temperatur
   4 - Fehler beim Starten der Temperaturmessung
 
-  Basiert teilweise auf dem BMP180_altitude_example des Höhenmessers:
+  Basiert teilweise auf dem Sketch BMP180_altitude_example aus der SFE_BMP180-Library:
   V10 Mike Grusin, SparkFun Electronics 10/24/2013
   V1.1.2 Updates for Arduino 1.6.4 5/2015
+
+  Basiert teilweise auf dem Sketch WiFiAccesPoint aus der ESP8266WebServer-Library:
+  Copyright (c) 2015, Majenko Technologies
 */
 
 // Libraries
@@ -27,37 +30,32 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
 
 // Objekte
 SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
 
-// Adresse des Displays auf 0x3C setzen
+// I2C-Adresse OLED
 #define I2C_ADDRESS 0x3C
 
-// Beschreibung
+// Name und Passwort Access Point
 #ifndef APSSID
 #define APSSID "Hoehenmesser"
 #define APPSK  "BoschBMP180"
 #endif
 
-// Variable
+// Variablen
 double baseline;
 double highest;
 double lowest;
 double T;
-
 const char *ssid = APSSID;
 const char *password = APPSK;
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
 
-// Text schreiben
-void handleRoot() {
-  server.send(200, "text/plain", "Hoehenmesser"); //wie wechsel ich die Zeilen?
-}
+
 
 //Setup
 void setup(void) {
@@ -83,15 +81,25 @@ void setup(void) {
     oled.println("BMP180 fehlt!");
     while (1);
   }
-
   delay(500);
 
+  // Webserver-Setup
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  WiFi.softAP(ssid, password);
 
+  IPAddress myIP = WiFi.softAPIP();
+  server.on("/", handleRoot);
+  server.begin();
+  oled.clear();
+  oled.println("Webserver gestartet!");
+  delay(500);
+  oled.clear();
+  
  // baseline-Druck messen
   baseline = getPressure();
 
  // baseline-Druck anzeigen
- oled.clear();
  oled.print(baseline);
  oled.print(" mbar");
 
@@ -100,22 +108,9 @@ void setup(void) {
  oled.print("Hoehe:");
  oled.setCursor(0,5);
  oled.print("Max:");
-
-  // Webserver-Setup
-  Serial.begin(115200);
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.println("");
-  Serial.print("Configuring access point...");
-  WiFi.softAP(ssid, password);
-
-  IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
-  server.on("/", handleRoot);
-  server.begin();
-  Serial.println("HTTP server started");
+ 
   }
+
 
   // Hauptcode
   void loop(void) {
@@ -145,16 +140,16 @@ void setup(void) {
 
     // Höhenunterschied anzeigen
     oled.set2X();
-    oled.setCursor(40, 2);               // Cursor bewegen
-    if (a >= 0.0) oled.print(" ");       // Leerzeichen, wenn positive Zahl
+    oled.setCursor(40, 2);               
+    if (a >= 0.0) oled.print(" ");      
     oled.print(a);
-    oled.print(" m");
+    oled.print("m");
 
     // Maximum anzeigen
-    oled.setCursor(40, 4);               // Cursor unter die Höhenanzeige bewegen
-    if (highest >= 0.0) oled.print(" "); // Leerzeichen, wenn positive Zahl
+    oled.setCursor(40, 4);               
+    if (highest >= 0.0) oled.print(" ");
     oled.print(highest);
-    oled.print(" m");
+    oled.print("m");
     oled.set1X();
 
     // Temperaturanzeige
@@ -170,7 +165,12 @@ void setup(void) {
     delay(500);
   }
 
-// Funktion getPressure() definieren
+// Webserver
+void handleRoot() {
+  server.send(200, "text/html", "<!DOCTYPE html>\"<html>\"<head>\"<title>Hoehenmesser</title>\"</head>\"<body>\"<p>Hier koennte ihre Werbung stehen!</p>\"</body>\"</html>");
+}
+
+// Funktion getPressure()
 double getPressure()
 {
   // Variablen
