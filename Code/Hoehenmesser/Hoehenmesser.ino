@@ -37,9 +37,9 @@ SSD1306AsciiWire oled;
 #define I2C_ADDRESS 0x3C
 
 // Beschreibung
-#ifndef STASSID
-#define STASSID "MyNetwork"
-#define STAPSK  "***REMOVED***"
+#ifndef APSSID
+#define APSSID "Hoehenmesser"
+#define APPSK  "***REMOVED***"
 #endif
 
 // Variable
@@ -48,8 +48,8 @@ double highest;
 double lowest;
 double T;
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
+const char *ssid = APSSID;
+const char *password = APPSK;
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
@@ -57,29 +57,9 @@ ESP8266WebServer server(80);
 // wofür genau?
 const int led = 13;
 
-// Funktion handleRoot (schreibt den Text, den man sieht, aber warum?)
+// Text schreiben
 void handleRoot() {
-  digitalWrite(led, 1);
-  server.send(200, "text/plain", "Hoehenmesser");
-  digitalWrite(led, 0);
-}
-
-// Funktion handleNotFound (macht was?)
-void handleNotFound() {
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++) {
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
+  server.send(200, "text/plain", "Hoehenmesser"); //wie wechsel ich die Zeilen?
 }
 
 //Setup
@@ -124,46 +104,23 @@ void setup(void) {
  oled.setCursor(0,5);
  oled.print("Max:");
 
- // Sonstiger Text
- oled.setCursor(0, 7);
- oled.print("WiFi.localIP()");
     
  delay(100);
 
   // Webserver-Setup
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.println("");
+  Serial.print("Configuring access point...");
+  WiFi.softAP(ssid, password);
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  if (MDNS.begin("esp8266")) {
-    Serial.println("MDNS responder started");
-  }
-
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP);
   server.on("/", handleRoot);
-
-  server.on("/inline", []() {
-    server.send(200, "text/plain", "this works as well");
-  });
-
-  server.onNotFound(handleNotFound);
-
   server.begin();
   Serial.println("HTTP server started");
-  
   }
 
   // Hauptcode
@@ -176,7 +133,7 @@ void setup(void) {
     // Webserver
     server.handleClient();
     MDNS.update();
-
+    
     // Druck messen
     P = getPressure();
 
@@ -211,6 +168,11 @@ void setup(void) {
     oled.setCursor(80, 0);
     oled.print(T);
     oled.println(" C");
+
+    // IP-Adresse anzeigen
+    oled.setCursor(0, 7);
+    oled.print("IP: ");
+    oled.print(WiFi.localIP());
     
     delay(500);
   }
