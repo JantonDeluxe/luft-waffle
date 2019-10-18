@@ -28,7 +28,6 @@
 #include <SSD1306Ascii.h>
 #include <SSD1306AsciiWire.h>
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 
 // Objekte
@@ -39,18 +38,14 @@ SSD1306AsciiWire oled;
 #define I2C_ADDRESS 0x3C
 
 // Name und Passwort Access Point
-#ifndef APSSID
-#define APSSID "Hoehenmesser"
-#define APPSK  "BoschBMP180"
-#endif
+const char *ssid = "Hoehenmesser";  
+const char *password = "BoschBMP180"; 
 
 // Variablen
 double baseline;
 double highest;
 double lowest;
 double T;
-const char *ssid = APSSID;
-const char *password = APPSK;
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
@@ -84,12 +79,9 @@ void setup(void) {
   delay(500);
 
   // Webserver-Setup
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
   WiFi.softAP(ssid, password);
-
-  IPAddress myIP = WiFi.softAPIP();
   server.on("/", handleRoot);
+  server.onNotFound(handleNotFound);
   server.begin();
   oled.clear();
   oled.println("Webserver gestartet!");
@@ -164,11 +156,17 @@ void setup(void) {
     
     delay(500);
   }
+  
 
 // Webserver
 void handleRoot() {
   server.send(200, "text/html", "<!DOCTYPE html>\"<html>\"<head>\"<title>Hoehenmesser</title>\"</head>\"<body>\"<p>Hier koennte ihre Werbung stehen!</p>\"</body>\"</html>");
 }
+
+void handleNotFound(){              
+  server.send(404, "text/plain", "404: Not found"); 
+}
+
 
 // Funktion getPressure()
 double getPressure()
