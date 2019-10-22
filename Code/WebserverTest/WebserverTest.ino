@@ -21,12 +21,6 @@ void handleRoot() {
   digitalWrite(led, 0);
 }
 
-/* 
-window.setInterval(function() {
-  // update
-}, 3000);
-*/
-
 void handleNotFound() {
   digitalWrite(led, 1);
   String message = "File Not Found\n\n";
