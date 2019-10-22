@@ -41,7 +41,7 @@ SSD1306AsciiWire oled;
 #define I2C_ADDRESS 0x3C
 
 // Name und Passwort Access Point
-const char *ssid = "Hoehenmesser";  
+const char *ssid = "MyNetwork";  
 const char *password = "***REMOVED***"; 
 
 // Variablen
@@ -51,6 +51,9 @@ double lowest;
 double T;
 double a;
 double* pointer = &a;
+const int messungen = 100; // Anzahl messungen
+float myArray[messungen]; // Array für Messwerte
+float durchschnitt = 0.0; // Durchschnittswert
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
@@ -89,25 +92,43 @@ void setup(void) {
     while (1);
   }
 
-  // Access Point
-  WiFi.softAP(ssid, password);
-  Serial.println("Access Point gestartet!"); 
+  // WLAN-Verbindung
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+ 
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println("Verbunden!"); 
 
   // Webserver-Setup
   server.on("/", handleRoot);
-  server.on("/data", handleData);
+  server.on("/readData", handleData);
+  server.on("/readTime", handleTime);
   server.onNotFound(handleNotFound);
   server.begin();
 
   Serial.println("HTTP-Server gestartet!"); 
   Serial.print("IP: ");
-  Serial.println(WiFi.softAPIP());
+  Serial.println(WiFi.localIP());
   
-  // baseline-Druck messen
-  baseline = getPressure();       // Genauer wäre: 100 getPressure-Werte und dann den Durchschnitt davon als baseline
+  // Kalibrierung
+   for (int i = 0; i < messungen; i++)
+  {
+    myArray[i] = getPressure();
+  }
+  for (int i = 0; i < messungen; i++)
+  {
+    durchschnitt = durchschnitt + myArray[i];
+  }
+  durchschnitt = durchschnitt / messungen;
+  Serial.println(durchschnitt);
 
-  // baseline-Druck anzeigen
-  oled.print(baseline);
+  oled.print(durchschnitt);
   oled.print(" mbar");
  
   // statische Teile der Höhenanzeigen
@@ -123,7 +144,7 @@ void setup(void) {
   void loop(void) {
 
     // Variablen
-    double a, P;
+    double P;
     char status;
 
     // Webserver
@@ -167,7 +188,7 @@ void setup(void) {
     // IP-Adresse anzeigen
     oled.setCursor(0, 7);
     oled.print("IP: ");
-    oled.print(WiFi.softAPIP());
+    oled.print(WiFi.localIP());
     
     delay(500);
   }
@@ -180,9 +201,16 @@ void handleRoot() {
 }
 
 void handleData(){
-  double d = *pointer ;
+  double d = *pointer;
+  Serial.println(*pointer);
   String data = String(d);
   server.send(200, "text/plane", data);
+}
+ 
+void handleTime(){
+  double t = millis();
+  String time = String(t);
+  server.send(200, "text/plane", time);
 }
 
 void handleNotFound(){              
@@ -209,7 +237,7 @@ double getPressure()
     if (status != 0)
     {
       
-      // Druck messen mit Genauigkeitsstufe 3
+      // Druck messen
       status = pressure.startPressure(3);
       if (status != 0)
       {
