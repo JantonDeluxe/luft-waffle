@@ -44,7 +44,7 @@ const char MAIN_page[] PROGMEM = R"=====(
     <div style="text-align:center;">
      <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
       <br>Real Time Data Logging with Graphs on ESP8266</div>
-    <div class="chart-container" position: relative; height:350px; width:100%">
+    <div class="chart-container" style="position: relative; height:350px; width:100%">
         <canvas id="Chart" width="400" height="400"></canvas>
     </div>
 <div>
