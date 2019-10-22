@@ -45,7 +45,6 @@ const char *ssid = "MyNetwork";
 const char *password = "Kaiqu2ah"; 
 
 // Variablen
-double baseline;
 double highest;
 double lowest;
 double T;
@@ -66,7 +65,7 @@ void setup(void) {
   //Datenübertragung
   Serial.begin(115200);
   delay(100);
-  Serial.println("");
+  Serial.println("Datenübertragung gestartet!");
   
   //Display-Setup
   Wire.begin();
@@ -85,7 +84,7 @@ void setup(void) {
 
   //Sensor-Setup
   if (pressure.begin())
-    Serial.println("BMP180 gefunden!");
+    Serial.println("BMP180 gestartet!");
   else
   {
     Serial.println("BMP180 fehlt!");
@@ -100,10 +99,8 @@ void setup(void) {
   }
  
   Serial.println("");
-  Serial.print("Connected to ");
+  Serial.print("Verbunden mit:");
   Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println("Verbunden!"); 
 
   // Webserver-Setup
   server.on("/", handleRoot);
@@ -126,7 +123,6 @@ void setup(void) {
     durchschnitt = durchschnitt + myArray[i];
   }
   durchschnitt = durchschnitt / messungen;
-  Serial.println(durchschnitt);
 
   oled.print(durchschnitt);
   oled.print(" mbar");
@@ -159,7 +155,7 @@ void setup(void) {
     status = pressure.getTemperature(T);
 
     // Höhenunterschied
-    a = pressure.altitude(P, baseline);
+    a = pressure.altitude(P, durchschnitt);
 
     // Maximalwerte
     if (a < lowest) lowest = a;
@@ -250,11 +246,11 @@ double getPressure()
         {
           return(P);
         }
-        else oled.println("Fehler 1");
+        else Serial.println("Fehler 1");
       }
-      else oled.println("Fehler 2");
+      else Serial.println("Fehler 2");
     }
-    else oled.println("Fehler 3");
+    else Serial.println("Fehler 3");
   }
-  else oled.println("Fehler 4");
+  else Serial.println("Fehler 4");
 }
