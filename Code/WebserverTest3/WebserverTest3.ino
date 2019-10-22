@@ -51,6 +51,9 @@ double lowest;
 double T;
 double a;
 double* pointer = &a;
+const int messungen = 100; // Anzahl messungen
+float myArray[messungen]; // Array für Messwerte
+float durchschnitt = 0.0; // Durchschnittswert
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
@@ -113,11 +116,19 @@ void setup(void) {
   Serial.print("IP: ");
   Serial.println(WiFi.localIP());
   
-  // baseline-Druck messen
-  baseline = getPressure();
+  // Kalibrierung
+   for (int i = 0; i < messungen; i++)
+  {
+    myArray[i] = getPressure();
+  }
+  for (int i = 0; i < messungen; i++)
+  {
+    durchschnitt = durchschnitt + myArray[i];
+  }
+  durchschnitt = durchschnitt / messungen;
+  Serial.println(durchschnitt);
 
-  // baseline-Druck anzeigen
-  oled.print(baseline);
+  oled.print(durchschnitt);
   oled.print(" mbar");
  
   // statische Teile der Höhenanzeigen
@@ -227,7 +238,7 @@ double getPressure()
     {
       
       // Druck messen
-      status = pressure.startPressure(3);      // Höchste von 3 Genauigkeits-Stufen der Library
+      status = pressure.startPressure(3);
       if (status != 0)
       {
         // Warten bis Messung fertig
