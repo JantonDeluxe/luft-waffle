@@ -30,6 +30,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
+// Header
+#include "index.h"
+
 // Objekte
 SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
@@ -46,6 +49,8 @@ double baseline;
 double highest;
 double lowest;
 double T;
+double a;
+double* pointer = &a;
 
 // Webserver-Port setzen
 ESP8266WebServer server(80);
@@ -55,11 +60,18 @@ ESP8266WebServer server(80);
 //Setup
 void setup(void) {
 
+  //Datenübertragung
+  Serial.begin(115200);
+  delay(100);
+  Serial.println("");
+  
   //Display-Setup
   Wire.begin();
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
   oled.set400kHz();
   oled.setFont(font5x7);
+  
+  Serial.println("Display gestartet!"); 
 
   oled.clear();
   oled.set2X();
@@ -70,36 +82,39 @@ void setup(void) {
 
   //Sensor-Setup
   if (pressure.begin())
-    oled.println("BMP180 gefunden!");
+    Serial.println("BMP180 gefunden!");
   else
   {
-    oled.println("BMP180 fehlt!");
+    Serial.println("BMP180 fehlt!");
     while (1);
   }
-  delay(500);
+
+  // Access Point
+  WiFi.softAP(ssid, password);
+  Serial.println("Access Point gestartet!"); 
 
   // Webserver-Setup
-  WiFi.softAP(ssid, password);
   server.on("/", handleRoot);
+  server.on("/data", handleData);
   server.onNotFound(handleNotFound);
   server.begin();
-  oled.clear();
-  oled.println("Webserver gestartet!");
-  delay(500);
-  oled.clear();
+
+  Serial.println("HTTP-Server gestartet!"); 
+  Serial.print("IP: ");
+  Serial.println(WiFi.softAPIP());
   
- // baseline-Druck messen
-  baseline = getPressure();
+  // baseline-Druck messen
+  baseline = getPressure();       // Genauer wäre: 100 getPressure-Werte und dann den Durchschnitt davon als baseline
 
- // baseline-Druck anzeigen
- oled.print(baseline);
- oled.print(" mbar");
-
- // statische Teile der Höhenanzeigen
- oled.setCursor(0, 3);
- oled.print("Hoehe:");
- oled.setCursor(0,5);
- oled.print("Max:");
+  // baseline-Druck anzeigen
+  oled.print(baseline);
+  oled.print(" mbar");
+ 
+  // statische Teile der Höhenanzeigen
+  oled.setCursor(0, 3);
+  oled.print("Hoehe:");
+  oled.setCursor(0,5);
+  oled.print("Max:");
  
   }
 
@@ -160,7 +175,14 @@ void setup(void) {
 
 // Webserver
 void handleRoot() {
-  server.send(200, "text/html", "<!DOCTYPE html>\"<html>\"<head>\"<title>Hoehenmesser</title>\"</head>\"<body>\"<p>Hier koennte ihre Werbung stehen!</p>\"</body>\"</html>");
+ String s = MAIN_page;
+ server.send(200, "text/html", s);
+}
+
+void handleData(){
+  double d = *pointer ;
+  String data = String(d);
+  server.send(200, "text/plane", data);
 }
 
 void handleNotFound(){              
@@ -187,8 +209,8 @@ double getPressure()
     if (status != 0)
     {
       
-      // Druck messen
-      status = pressure.startPressure(3);      // Höchste von 3 Genauigkeits-Stufen der Library
+      // Druck messen mit Genauigkeitsstufe 3
+      status = pressure.startPressure(3);
       if (status != 0)
       {
         // Warten bis Messung fertig
