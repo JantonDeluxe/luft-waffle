@@ -141,7 +141,7 @@ const char MAIN_page[] PROGMEM = R"=====(
         cell2.innerHTML = data;
       }
     };
-    xhttp.open("GET", "index.php", true);  //Handle readADC server on ESP8266
+    xhttp.open("GET", "getData", true);  //Handle readADC server on ESP8266
     xhttp.send();
   }
 </script>
