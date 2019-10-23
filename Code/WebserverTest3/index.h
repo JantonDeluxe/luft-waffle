@@ -13,23 +13,23 @@ const char MAIN_page[] PROGMEM = R"=====(
     -webkit-user-select: none;
     -ms-user-select: none;
   }
- 
+
   /* Data Table Styling */
   #dataTable {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
   }
- 
+
   #dataTable td, #dataTable th {
     border: 1px solid #ddd;
     padding: 8px;
   }
- 
+
   #dataTable tr:nth-child(even){background-color: #f2f2f2;}
- 
+
   #dataTable tr:hover {background-color: #ddd;}
- 
+
   #dataTable th {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -42,7 +42,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 
 <body>
     <div style="text-align:center;">
-     <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
+    <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
       <br>Real Time Data Logging with Graphs on ESP8266</div>
     <div class="chart-container" style="position: relative; height:350px; width:100%">
         <canvas id="Chart" width="400" height="400"></canvas>
@@ -113,7 +113,7 @@ setInterval(function() {
   // Call a function repetatively with 5 Second interval
   getData();
 }, 5000); //5000mSeconds update rate
- 
+
 function getData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -136,7 +136,7 @@ function getData() {
   xhttp.open("GET", "readData", true);  //Handle readADC server on ESP8266
   xhttp.send();
 }
-    
+
 </script>
 </body>
 
