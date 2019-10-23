@@ -57,55 +57,60 @@ const char MAIN_page[] PROGMEM = R"=====(
 
 <script>
 var data = [];
-  var time = new Date().toLocaleTimeString();
-  var values = data;
+  var time = "";
   var timeStamp = time;
-  function showGraph()
+
+  var graph;
+
+  function addGraph()
   {
-      for (i = 0; i < arguments.length; i++) {
-        values.push(arguments[i]);    
-      }
-  
-      var ctx = document.getElementById("Chart").getContext('2d');
-      var Chart2 = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: [timeStamp],  //Bottom Labeling
-              datasets: [{
-                  label: "Hoehe",
-                  fill: false,  //Try with true
-                  backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
-                  borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
-                  data: values,
-              }],
+    var ctx = document.getElementById("Chart").getContext('2d');
+    graph = new Chart(ctx, {
+      type: 'line',
+        data: {
+        labels: [timeStamp],  //Bottom Labeling
+        datasets: [{
+          label: "Hoehe",
+          fill: false,  //Try with true
+          backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
+          borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
+          data: null,
+        }],
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Hoehe"
           },
-          options: {
-              title: {
-                      display: true,
-                      text: "Hoehe"
-                  },
-              maintainAspectRatio: false,
-              elements: {
-              line: {
-                      tension: 0.5 //Smoothening (Curved) of data lines
-                  }
-              },
-              scales: {
-                      yAxes: [{
-                          ticks: {
-                              beginAtZero:true
-                          }
-                      }]
+          maintainAspectRatio: false,
+          elements: {
+            line: {
+              tension: 0.5 //Smoothening (Curved) of data lines
+            }
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero:true
               }
-          }
-      });
-  
+            }]
+        }
+      }
+    })
   }
-  
+
+  function updateGraph(data) {
+    graph.data.labels.push(timeStamp);
+    graph.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    graph.update();
+  }
+
   //On Page load show graphs
   window.onload = function() {
     console.log(new Date().toLocaleTimeString());
-    showGraph(5,10,4,58);
+    addGraph(5,10,4,58);
   };
   
   //Ajax script to get ADC voltage at every 5 Seconds 
@@ -114,31 +119,35 @@ var data = [];
   setInterval(function() {
     // Call a function repetatively with 5 Second interval
     getData();
-  }, 5000); //5000mSeconds update rate
+  }, 333); //5000mSeconds update rate
   
+
+  function showGraph(data) {
+    graph.data.labels.push(timeStamp);
+    graph.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    graph.update();
+  }
+
   function getData() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-       //Push the data in array
-    var time = new Date().toLocaleTimeString();
-    data = this.responseText; 
-        values.push(data);
-        timeStamp.push(time);
-        showGraph();  //Update Graphs
-    //Update Data Table
-      var table = document.getElementById("dataTable");
-      var row = table.insertRow(1); //Add after headings
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-      cell1.innerHTML = time;
-      cell2.innerHTML = data;
+        data = this.responseText; 
+        updateGraph(data);
+        var table = document.getElementById("dataTable");
+        var row = table.insertRow(1); //Add after headings
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        cell1.innerHTML = time;
+        cell2.innerHTML = data;
       }
     };
-    xhttp.open("GET", "readData", true);  //Handle readADC server on ESP8266
+    xhttp.open("GET", "index.php", true);  //Handle readADC server on ESP8266
     xhttp.send();
   }
-
+  
 </script>
 </body>
 
