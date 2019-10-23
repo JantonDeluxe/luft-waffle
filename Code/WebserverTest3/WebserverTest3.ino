@@ -45,6 +45,7 @@ const char *ssid = "MyNetwork";
 const char *password = "Kaiqu2ah"; 
 
 // Variablen
+double baseline
 double highest;
 double lowest;
 double T;
@@ -124,7 +125,9 @@ void setup(void) {
   }
   durchschnitt = durchschnitt / messungen;
 
-  oled.print(durchschnitt);
+  baseline = durchschnitt
+
+  oled.print(baseline);
   oled.print(" mbar");
  
   // statische Teile der Höhenanzeigen
@@ -155,7 +158,7 @@ void setup(void) {
     status = pressure.getTemperature(T);
 
     // Höhenunterschied
-    a = pressure.altitude(P, durchschnitt);
+    a = pressure.altitude(P, baseline);
 
     // Maximalwerte
     if (a < lowest) lowest = a;
@@ -186,7 +189,7 @@ void setup(void) {
     oled.print("IP: ");
     oled.print(WiFi.localIP());
     
-    delay(500);
+    delay(333);
   }
   
 
