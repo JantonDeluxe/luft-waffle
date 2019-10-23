@@ -43,24 +43,21 @@ const char MAIN_page[] PROGMEM = R"=====(
 <body>
     <div style="text-align:center;">
     <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
-      <br>Real Time Data Logging with Graphs on ESP8266</div>
+    <p>Real Time Data Logging with Graphs on ESP8266</p></div>
     <div class="chart-container" style="position: relative; height:350px; width:100%">
         <canvas id="Chart" width="400" height="400"></canvas>
     </div>
 <div>
   <table id="dataTable">
-    <tr><th>Time</th><th>Hoehe</th></tr>
+    <tr><th>Zeit</th><th>H&ouml;he</th></tr>
   </table>
 </div>
-<br>
-<br>  
 
 <script>
-var data = [];
+  var data = [];
   var time = "";
-  var timeStamp = time;
 
-  var graph;
+  let graph;
 
   function addGraph()
   {
@@ -68,13 +65,13 @@ var data = [];
     graph = new Chart(ctx, {
       type: 'line',
         data: {
-        labels: [timeStamp],  //Bottom Labeling
+        labels: [time],  //Bottom Labeling
         datasets: [{
-          label: "Hoehe",
+          label: "H\u00f6he",
           fill: false,  //Try with true
           backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
           borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
-          data: null,
+          data: null, // Wenn es noch keine Daten gibt wird 'null' angezeigt
         }],
         },
         options: {
@@ -99,8 +96,8 @@ var data = [];
     })
   }
 
-  function updateGraph(data) {
-    graph.data.labels.push(timeStamp);
+  function updateGraph() {
+    graph.data.labels.push(time);
     graph.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
     });
@@ -109,18 +106,16 @@ var data = [];
 
   //On Page load show graphs
   window.onload = function() {
-    console.log(new Date().toLocaleTimeString());
-    addGraph(5,10,4,58);
+    addGraph();
   };
-  
+
   //Ajax script to get ADC voltage at every 5 Seconds 
   //Read This tutorial https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/
-  
+
   setInterval(function() {
-    // Call a function repetatively with 5 Second interval
     getData();
-  }, 333); //5000mSeconds update rate
-  
+  }, 333); // 333ms update rate
+
 
   function showGraph(data) {
     graph.data.labels.push(timeStamp);
@@ -134,8 +129,10 @@ var data = [];
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        data = this.responseText; 
-        updateGraph(data);
+        var response = this.responseText.split(";"); // Erstellt ein array aus den Teilen des response-strings (';' ist das Trennzeichen)
+        time = response[0]; // Zeit hat den ersten Index...
+        data = response[1]; // ...und die Höhe den zweiten
+        updateGraph();
         var table = document.getElementById("dataTable");
         var row = table.insertRow(1); //Add after headings
         var cell1 = row.insertCell(0);
@@ -147,7 +144,6 @@ var data = [];
     xhttp.open("GET", "index.php", true);  //Handle readADC server on ESP8266
     xhttp.send();
   }
-  
 </script>
 </body>
 
