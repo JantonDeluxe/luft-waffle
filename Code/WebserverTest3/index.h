@@ -77,7 +77,7 @@ const char MAIN_page[] PROGMEM = R"=====(
         options: {
           title: {
             display: true,
-            text: "Hoehe"
+            text: "H\u00f6he"
           },
           maintainAspectRatio: false,
           elements: {
