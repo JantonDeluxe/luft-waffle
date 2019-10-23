@@ -98,7 +98,7 @@ void setup(void) {
     delay(500);
     Serial.print(".");
   }
- 
+
   Serial.println("");
   Serial.print("Verbunden mit:");
   Serial.println(ssid);
@@ -106,7 +106,6 @@ void setup(void) {
   // Webserver-Setup
   server.on("/", handleRoot);
   server.on("/readData", handleData);
-  server.on("/readTime", handleTime);
   server.onNotFound(handleNotFound);
   server.begin();
 
@@ -115,7 +114,7 @@ void setup(void) {
   Serial.println(WiFi.localIP());
   
   // Kalibrierung
-   for (int i = 0; i < messungen; i++)
+  for (int i = 0; i < messungen; i++)
   {
     myArray[i] = getPressure();
   }
@@ -129,13 +128,13 @@ void setup(void) {
 
   oled.print(baseline);
   oled.print(" mbar");
- 
+
   // statische Teile der Höhenanzeigen
   oled.setCursor(0, 3);
   oled.print("Hoehe:");
   oled.setCursor(0,5);
   oled.print("Max:");
- 
+
   }
 
 
@@ -195,21 +194,18 @@ void setup(void) {
 
 // Webserver
 void handleRoot() {
- String s = MAIN_page;
- server.send(200, "text/html", s);
+  String s = MAIN_page;
+  server.send(200, "text/html", s);
 }
 
 void handleData(){
   double d = *pointer;
   Serial.println(*pointer);
   String data = String(d);
-  server.send(200, "text/plane", data);
-}
- 
-void handleTime(){
   double t = millis();
   String time = String(t);
-  server.send(200, "text/plane", time);
+  String base = "t;d";
+  server.send(200, "text/plane", base.replace(time, data));
 }
 
 void handleNotFound(){              
