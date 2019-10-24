@@ -29,6 +29,7 @@
 #include <SSD1306AsciiWire.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <string>
 
 // Header
 #include "index.h"
@@ -41,11 +42,11 @@ SSD1306AsciiWire oled;
 #define I2C_ADDRESS 0x3C
 
 // Name und Passwort Access Point
-const char *ssid = "MyNetwork";  
+const char *ssid = "Janky";  
 const char *password = "***REMOVED***"; 
 
 // Variablen
-double baseline
+double baseline;
 double highest;
 double lowest;
 double T;
@@ -124,7 +125,7 @@ void setup(void) {
   }
   durchschnitt = durchschnitt / messungen;
 
-  baseline = durchschnitt
+  baseline = durchschnitt;
 
   oled.print(baseline);
   oled.print(" mbar");
@@ -200,12 +201,13 @@ void handleRoot() {
 
 void handleData(){
   double d = *pointer;
-  Serial.println(*pointer);
   String data = String(d);
   double t = millis();
   String time = String(t);
-  String base = "t;d";
-  server.send(200, "text/plane", base.replace(time, data));
+  String eins = String(time + ";");
+  String zwei = String(eins + String(d));
+  server.send(200, "text/plain", zwei);
+  Serial.println(zwei);
 }
 
 void handleNotFound(){              

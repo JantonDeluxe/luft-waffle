@@ -114,7 +114,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 
   setInterval(function() {
     getData();
-  }, 333); // 333ms update rate
+  }, 500); // 500ms update rate
 
 
   function showGraph(data) {
@@ -141,7 +141,7 @@ const char MAIN_page[] PROGMEM = R"=====(
         cell2.innerHTML = data;
       }
     };
-    xhttp.open("GET", "readData", true);  //Handle readADC server on ESP8266
+    xhttp.open("GET", "readData", true);
     xhttp.send();
   }
 </script>
