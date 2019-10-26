@@ -6,13 +6,7 @@
   Altimeter: Bosch BMP180
   Display: GM009605 OLED
 
-
-  Fehlercodes:
-  ------------
-  1 - Fehler beim Erhalten des Drucks
-  2 - Fehler beim Starten der Druckmessung
-  3 - Fehler beim Erhalten der Temperatur
-  4 - Fehler beim Starten der Temperaturmessung
+  
 
   Basiert teilweise auf dem Sketch BMP180_altitude_example aus der SFE_BMP180-Library:
   V10 Mike Grusin, SparkFun Electronics 10/24/2013
@@ -29,36 +23,37 @@
 #include <SSD1306AsciiWire.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <string>
 
 // Header
 #include "index.h"
+
+// I2C-Adresse OLED
+#define I2C_ADDRESS 0x3C
 
 // Objekte
 SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
 
-// I2C-Adresse OLED
-#define I2C_ADDRESS 0x3C
+// Webserver-Port setzen
+ESP8266WebServer server(80);
 
 // Name und Passwort Access Point
 const char *ssid = "Janky";  
 const char *password = "***REMOVED***"; 
 
-// Variablen
-double baseline;
+// Kalibrierung: Anzahl der Messungen
+const int messungen = 100;
+
+// Globale Variablen
 double highest;
 double lowest;
 double T;
 double a;
-double* pointer = &a;
-const int messungen = 100; // Anzahl messungen
+double* pointereins = &T;
+double* pointerzwei = &a;
+
 float myArray[messungen]; // Array für Messwerte
 float durchschnitt = 0.0; // Durchschnittswert
-
-// Webserver-Port setzen
-ESP8266WebServer server(80);
-
 
 
 //Setup
@@ -67,6 +62,7 @@ void setup(void) {
   //Datenübertragung
   Serial.begin(115200);
   delay(100);
+  Serial.println("");
   Serial.println("Datenübertragung gestartet!");
   
   //Display-Setup
@@ -92,6 +88,13 @@ void setup(void) {
     Serial.println("BMP180 fehlt!");
     while (1);
   }
+
+  // IP-Adresse
+  IPAddress ip(192, 168, 178, 220);
+  IPAddress gateway(192, 168, 178, 1);
+  IPAddress subnet(255, 255, 255, 0);
+  IPAddress dns(192, 168, 178, 1);
+  WiFi.config(ip, dns, gateway, subnet);
 
   // WLAN-Verbindung
   WiFi.begin(ssid, password);
@@ -125,11 +128,6 @@ void setup(void) {
   }
   durchschnitt = durchschnitt / messungen;
 
-  baseline = durchschnitt;
-
-  oled.print(baseline);
-  oled.print(" mbar");
-
   // statische Teile der Höhenanzeigen
   oled.setCursor(0, 3);
   oled.print("Hoehe:");
@@ -158,7 +156,7 @@ void setup(void) {
     status = pressure.getTemperature(T);
 
     // Höhenunterschied
-    a = pressure.altitude(P, baseline);
+    a = pressure.altitude(P, durchschnitt);
 
     // Maximalwerte
     if (a < lowest) lowest = a;
@@ -179,9 +177,15 @@ void setup(void) {
     oled.print("m");
     oled.set1X();
 
+    // Druckanzeige
+    oled.setCursor(0, 0);
+    oled.print(getPressure());
+    oled.print(" mbar");
+
     // Temperaturanzeige
-    oled.setCursor(80, 0);
-    oled.print(T);
+    oled.setCursor(79, 0);
+    if (a >= 0.0) oled.print(" ");
+    oled.print(*pointereins);
     oled.println(" C");
 
     // IP-Adresse anzeigen
@@ -200,14 +204,11 @@ void handleRoot() {
 }
 
 void handleData(){
-  double d = *pointer;
-  String data = String(d);
-  double t = millis();
-  String time = String(t);
-  String eins = String(time + ";");
-  String zwei = String(eins + String(d));
-  server.send(200, "text/plain", zwei);
-  Serial.println(zwei);
+  double d = *pointerzwei;
+  double t = millis() / 1000;
+  String teil = String(String(t) + ";");
+  String kombi = String(teil + String(d));
+  server.send(200, "text/plain", kombi);
 }
 
 void handleNotFound(){              
@@ -215,7 +216,7 @@ void handleNotFound(){
 }
 
 
-// Funktion getPressure()
+// Funktion getPressure
 double getPressure()
 {
   // Variablen
@@ -247,11 +248,11 @@ double getPressure()
         {
           return(P);
         }
-        else Serial.println("Fehler 1");
+        else Serial.println("Fehler beim Erhalten des Drucks");
       }
-      else Serial.println("Fehler 2");
+      else Serial.println("Fehler beim Starten der Druckmessung");
     }
-    else Serial.println("Fehler 3");
+    else Serial.println("Fehler beim Erhalten der Temperatur");
   }
-  else Serial.println("Fehler 4");
+  else Serial.println("Fehler beim Starten der Temperaturmessung");
 }

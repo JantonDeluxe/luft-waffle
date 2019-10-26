@@ -1,11 +1,8 @@
 const char MAIN_page[] PROGMEM = R"=====(
-
 <!doctype html>
 <html>
-
 <head>
   <title>H&ouml;henmesser</title>
-
   <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>  
   <style>
   canvas{
@@ -43,7 +40,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 <body>
     <div style="text-align:center;">
     <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
-    <p>Real Time Data Logging with Graphs on ESP8266</p></div>
+    </div>
     <div class="chart-container" style="position: relative; height:350px; width:100%">
         <canvas id="Chart" width="400" height="400"></canvas>
     </div>
@@ -96,6 +93,7 @@ const char MAIN_page[] PROGMEM = R"=====(
     })
   }
 
+  // Graphen nach erhalt neuer Daten aktualisieren
   function updateGraph() {
     graph.data.labels.push(time);
     graph.data.datasets.forEach((dataset) => {
@@ -104,19 +102,18 @@ const char MAIN_page[] PROGMEM = R"=====(
     graph.update();
   }
 
-  //On Page load show graphs
+  //Beim Starten der Seite Graphen anzeigen
   window.onload = function() {
     addGraph();
   };
 
-  //Ajax script to get ADC voltage at every 5 Seconds 
-  //Read This tutorial https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/
-
+  // Update-Geschwindigkeit (500 ms)
   setInterval(function() {
     getData();
-  }, 500); // 500ms update rate
+  }, 333); 
 
 
+  // Graph mit Daten anzeigen
   function showGraph(data) {
     graph.data.labels.push(timeStamp);
     graph.data.datasets.forEach((dataset) => {
@@ -125,6 +122,7 @@ const char MAIN_page[] PROGMEM = R"=====(
     graph.update();
   }
 
+  // Daten unter /readData abrufen
   function getData() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
