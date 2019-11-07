@@ -12,8 +12,7 @@
   V10 Mike Grusin, SparkFun Electronics 10/24/2013
   V1.1.2 Updates for Arduino 1.6.4 5/2015
 
-  Basiert teilweise auf dem Sketch WiFiAccessPoint aus der ESP8266WebServer-Library:
-  Copyright (c) 2015, Majenko Technologies
+ 
 */
 
 // Libraries
@@ -47,13 +46,15 @@ const int messungen = 100;
 // Globale Variablen
 double highest;
 double lowest;
+char status;
+double P;
 double T;
 double a;
 double* pointereins = &T;
 double* pointerzwei = &a;
 
-float myArray[messungen]; // Array für Messwerte
-float durchschnitt = 0.0; // Durchschnittswert
+float Array[messungen];
+float ausgangsdruck = 0.0;
 
 
 //Setup
@@ -91,9 +92,9 @@ void setup(void) {
 
   // IP-Adresse
   IPAddress ip(192, 168, 178, 220);
+  IPAddress dns(192, 168, 178, 1);
   IPAddress gateway(192, 168, 178, 1);
   IPAddress subnet(255, 255, 255, 0);
-  IPAddress dns(192, 168, 178, 1);
   WiFi.config(ip, dns, gateway, subnet);
 
   // WLAN-Verbindung
@@ -120,13 +121,15 @@ void setup(void) {
   // Kalibrierung
   for (int i = 0; i < messungen; i++)
   {
-    myArray[i] = getPressure();
+    Array[i] = getPressure();
   }
+  
   for (int i = 0; i < messungen; i++)
   {
-    durchschnitt = durchschnitt + myArray[i];
+    ausgangsdruck = ausgangsdruck + Array[i];
   }
-  durchschnitt = durchschnitt / messungen;
+  
+  ausgangsdruck = ausgangsdruck / messungen;
 
   // statische Teile der Höhenanzeigen
   oled.setCursor(0, 3);
@@ -140,10 +143,6 @@ void setup(void) {
   // Hauptcode
   void loop(void) {
 
-    // Variablen
-    double P;
-    char status;
-
     // Webserver
     server.handleClient();
     
@@ -156,7 +155,7 @@ void setup(void) {
     status = pressure.getTemperature(T);
 
     // Höhenunterschied
-    a = pressure.altitude(P, durchschnitt);
+    a = pressure.altitude(P, ausgangsdruck);
 
     // Maximalwerte
     if (a < lowest) lowest = a;
@@ -219,10 +218,6 @@ void handleNotFound(){
 // Funktion getPressure
 double getPressure()
 {
-  // Variablen
-  char status;
-  double T,P,p0,a;
-  
   // Temperatur messen
   status = pressure.startTemperature();
   if (status != 0)
