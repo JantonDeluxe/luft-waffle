@@ -22,7 +22,7 @@
   https://circuits4you.com/2019/01/11/esp8266-data-logging-with-real-time-graphs/
 
 
-  Danke an Nick Lamprecht für die Hilfe mit Java Script!
+  Danke an Nick Lamprecht für seine Hilfe mit Java Skript!
 */
 
 // Libraries
@@ -32,7 +32,6 @@
 #include <SSD1306AsciiWire.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <FS.h> 
 
 // Header
 #include "index.h"
@@ -43,11 +42,13 @@
 // Objekte
 SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
+
+// Webserver-Port setzen
 ESP8266WebServer server(80);
 
-// Name und Passwort WLAN oder Access Point
-const char *ssid = "Hoehenmesser";  
-const char *password = "BoschBMP180"; 
+// Name und Passwort Access Point
+const char *ssid = "MyNetwork";  
+const char *password = "Kaiqu2ah"; 
 
 // Kalibrierung: Anzahl der Messungen
 const int messungen = 100;
@@ -55,34 +56,28 @@ const int messungen = 100;
 // Globale Variablen
 double highest;
 double lowest;
+char status;
 double P;
 double T;
 double a;
-
 double* pointereins = &T;
 double* pointerzwei = &a;
-
-char status;
 
 float Array[messungen];
 float ausgangsdruck = 0.0;
 
 
-
 //Setup
 void setup(void) {
 
-  // Serial-Setup
+  //Datenübertragung
   Serial.begin(115200);
   delay(100);
   Serial.println("");
-  Serial.println("Serial gestartet!");
-
-  // I2C-Setup
-  Wire.begin();
-  Serial.println("I2C gestartet!");
-
+  Serial.println("Datenübertragung gestartet!");
+  
   //Display-Setup
+  Wire.begin();
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
   oled.set400kHz();
   oled.setFont(font5x7);
@@ -105,7 +100,7 @@ void setup(void) {
     while (1);
   }
 
-/* // WLAN-Verbindung
+  // WLAN-Verbindung
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -113,46 +108,30 @@ void setup(void) {
   }
 
   Serial.println("");
-  Serial.print("Verbunden mit: ");
+  Serial.print("Verbunden mit:");
   Serial.println(ssid);
-*/
-
-  // Access Point-Setup
-  IPAddress local_IP(192,168,4,22);
-  IPAddress gateway(192,168,4,9);
-  IPAddress subnet(255,255,255,0);
-
-  WiFi.softAPConfig(local_IP, gateway, subnet);
-  WiFi.softAP(ssid, password);
-
-  Serial.println("Access Point getstartet!");
-
-   // Dateisystem starten
-  SPIFFS.begin();
-  Serial.println("Dateisystem getstartet!");
 
   // Webserver-Setup
   server.on("/", handleRoot);
   server.on("/readData", handleData);
-  server.onNotFound(handleWebRequests);
+  server.onNotFound(handleNotFound);
   server.begin();
 
   Serial.println("HTTP-Server gestartet!"); 
   Serial.print("IP: ");
-  Serial.println(WiFi.softAPIP()); 
-/*
   Serial.println(WiFi.localIP());
-*/
   
   // Kalibrierung
   for (int i = 0; i < messungen; i++)
   {
     Array[i] = getPressure();
   }
+  
   for (int i = 0; i < messungen; i++)
   {
     ausgangsdruck = ausgangsdruck + Array[i];
-  } 
+  }
+  
   ausgangsdruck = ausgangsdruck / messungen;
 
   // statische Teile der Höhenanzeigen
@@ -214,12 +193,7 @@ void setup(void) {
     // IP-Adresse anzeigen
     oled.setCursor(0, 7);
     oled.print("IP: ");
-
-    oled.print(WiFi.softAPIP());
-    
-    /*
     oled.print(WiFi.localIP());
-    */
     
     delay(333);
   }
@@ -239,46 +213,8 @@ void handleData(){
   server.send(200, "text/plain", kombi);
 }
 
-void handleWebRequests(){
-  if(loadFromSpiffs(server.uri())) return;
-  String message = "File Not Detected\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " NAME:"+server.argName(i) + "\n VALUE:" + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  Serial.println(message);
-}
-
-bool loadFromSpiffs(String path){
-  String dataType = "text/plain";
-  if(path.endsWith("/")) path += "index.htm";
- 
-  if(path.endsWith(".src")) path = path.substring(0, path.lastIndexOf("."));
-  else if(path.endsWith(".html")) dataType = "text/html";
-  else if(path.endsWith(".htm")) dataType = "text/html";
-  else if(path.endsWith(".css")) dataType = "text/css";
-  else if(path.endsWith(".js")) dataType = "application/javascript";
-  else if(path.endsWith(".png")) dataType = "image/png";
-  else if(path.endsWith(".gif")) dataType = "image/gif";
-  else if(path.endsWith(".jpg")) dataType = "image/jpeg";
-  else if(path.endsWith(".ico")) dataType = "image/x-icon";
-  else if(path.endsWith(".xml")) dataType = "text/xml";
-  else if(path.endsWith(".pdf")) dataType = "application/pdf";
-  else if(path.endsWith(".zip")) dataType = "application/zip";
-  File dataFile = SPIFFS.open(path.c_str(), "r");
-  if (server.hasArg("download")) dataType = "application/octet-stream";
-  if (server.streamFile(dataFile, dataType) != dataFile.size()) {
-  }
- 
-  dataFile.close();
-  return true;
+void handleNotFound(){              
+  server.send(404, "text/plain", "404: Not found"); 
 }
 
 

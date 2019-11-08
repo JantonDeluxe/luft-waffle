@@ -3,7 +3,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 <html>
 <head>
   <title>H&ouml;henmesser</title>
-   <script src = "Chart.min.js"></script>
+   <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   <style>
   canvas{
     -moz-user-select: none;
