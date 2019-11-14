@@ -46,8 +46,8 @@ SSD1306AsciiWire oled;
 ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
-const char *ssid = "Hoehenmesser";  
-const char *password = "***REMOVED***"; 
+const char* ssid = "Hoehenmesser";  
+const char* password = "***REMOVED***"; 
 
 // Kalibrierung: Anzahl der Messungen
 const int messungen = 100;
@@ -56,8 +56,9 @@ const int messungen = 100;
 double highest;
 double lowest;
 double P;
-double T;
 double a;
+double T;
+
 
 double* pointereins = &T;
 double* pointerzwei = &a;
@@ -127,9 +128,16 @@ void setup(void) {
 
   Serial.println("Access Point getstartet!");
 
-   // Dateisystem starten
-  SPIFFS.begin();
-  Serial.println("Dateisystem getstartet!");
+  // Dateisystem starten
+  if(SPIFFS.begin())
+   {
+     Serial.println("SPIFFS gestartet!");
+   }
+   else
+   {
+     Serial.println("SPIFFS nicht gestartet!");
+     while (1);
+    }
 
   // Webserver-Setup
   server.on("/", handleRoot);
@@ -144,7 +152,7 @@ void setup(void) {
   Serial.println(WiFi.localIP());
 */
   
-  // Kalibrierung
+  // Basisdruck
   for (int i = 0; i < messungen; i++)
   {
     Array[i] = getPressure();
@@ -173,11 +181,6 @@ void setup(void) {
     // Druck messen
     P = getPressure();
 
-    // Temperatur messen
-    status = pressure.startTemperature();
-    delay(100);
-    status = pressure.getTemperature(T);
-
     // Höhenunterschied
     a = pressure.altitude(P, ausgangsdruck);
 
@@ -185,6 +188,11 @@ void setup(void) {
     if (a < lowest) lowest = a;
 
     if (a > highest) highest = a;
+
+    // Temperatur messen
+    status = pressure.startTemperature();
+    delay(100);
+    status = pressure.getTemperature(T);
 
     // Höhenunterschied anzeigen
     oled.set2X();
@@ -280,6 +288,7 @@ bool loadFromSpiffs(String path){
   dataFile.close();
   return true;
 }
+
 
 
 // Funktion getPressure
