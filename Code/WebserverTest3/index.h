@@ -105,8 +105,8 @@ const char MAIN_page[] PROGMEM = R"=====(
   // Graphen nach erhalt neuer Daten aktualisieren
   function updateGraph() {
     graph.data.labels.push(time);
-    graph.data.datasets.[0].data.push(data);
-    graph.data.datasets.[1].data.push(speed);
+    graph.data.datasets[0].data.push(data);
+    graph.data.datasets[1].data.push(speed);
     graph.update();
   }
 
