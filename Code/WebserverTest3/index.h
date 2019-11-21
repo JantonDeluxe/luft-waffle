@@ -46,12 +46,13 @@ const char MAIN_page[] PROGMEM = R"=====(
     </div>
 <div>
   <table id="dataTable">
-    <tr><th>Zeit</th><th>H&ouml;he</th></tr>
+    <tr><th>Zeit</th><th>H&ouml;he</th><th>Geschwindigkeit</th></tr>
   </table>
 </div>
 
 <script>
   var data = [];
+  var speed = [];
   var time = "";
 
   let graph;
@@ -63,17 +64,25 @@ const char MAIN_page[] PROGMEM = R"=====(
       type: 'line',
         data: {
         labels: [time],  //Bottom Labeling
-        datasets: [{
+        datasets: [
+        {
           label: "H\u00f6he",
-          fill: false,  //Try with true
+          fill: false,  
           backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
           borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
           data: null, // Wenn es noch keine Daten gibt wird 'null' angezeigt
-        }],
+        },
+        {
+          label: "Geschwindigkeit",
+          fill: false,  
+          backgroundColor: 'rgba(0, 140, 192, 1)', //Dot marker color
+          borderColor: 'rgba(0, 140, 192, 1)', //Graph Line Color
+          data: null, // Wenn es noch keine Daten gibt wird 'null' angezeigt
+          }],
         },
         options: {
           title: {
-            display: true,
+            display: false,
             text: "H\u00f6he"
           },
           maintainAspectRatio: false,
@@ -96,9 +105,8 @@ const char MAIN_page[] PROGMEM = R"=====(
   // Graphen nach erhalt neuer Daten aktualisieren
   function updateGraph() {
     graph.data.labels.push(time);
-    graph.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
+    graph.data.datasets.[0].data.push(data);
+    graph.data.datasets.[1].data.push(speed);
     graph.update();
   }
 
@@ -107,20 +115,10 @@ const char MAIN_page[] PROGMEM = R"=====(
     addGraph();
   };
 
-  // Update-Geschwindigkeit (333 ms)
+  // Update-Geschwindigkeit (429 ms)
   setInterval(function() {
     getData();
-  }, 333); 
-
-
-  // Graph mit Daten anzeigen
-  function showGraph(data) {
-    graph.data.labels.push(timeStamp);
-    graph.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
-    graph.update();
-  }
+  }, 429); 
 
   // Daten unter /readData abrufen
   function getData() {
@@ -130,13 +128,16 @@ const char MAIN_page[] PROGMEM = R"=====(
         var response = this.responseText.split(";"); // Erstellt ein array aus den Teilen des response-strings (';' ist das Trennzeichen)
         time = response[0]; // Zeit hat den ersten Index...
         data = response[1]; // ...und die Höhe den zweiten
+        speed = response[2];
         updateGraph();
         var table = document.getElementById("dataTable");
         var row = table.insertRow(1); //Add after headings
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
         cell1.innerHTML = time;
         cell2.innerHTML = data;
+        cell3.innerHTML = speed;
       }
     };
     xhttp.open("GET", "readData", true);

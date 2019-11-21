@@ -46,8 +46,8 @@ SSD1306AsciiWire oled;
 ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
-const char* ssid = "Hoehenmesser";  
-const char* password = "BoschBMP180"; 
+const char* ssid = "Janky";  
+const char* password = "6zhnJI9ol."; 
 
 // Kalibrierung: Anzahl der Messungen
 const int messungen = 100;
@@ -58,7 +58,12 @@ double lowest;
 double P;
 double a;
 double T;
-
+double v;
+float startTime;
+float elapsedTime;
+double S1;
+double S2;
+double deltaS;
 
 double* pointereins = &T;
 double* pointerzwei = &a;
@@ -106,7 +111,17 @@ void setup(void) {
     while (1);
   }
 
-/* // WLAN-Verbindung
+ /* // Access Point-Setup
+  IPAddress local_IP(192,168,4,22);
+  IPAddress gateway(192,168,4,9);
+  IPAddress subnet(255,255,255,0);
+
+  WiFi.softAPConfig(local_IP, gateway, subnet);
+  WiFi.softAP(ssid, password);
+
+  Serial.println("Access Point getstartet!");*/
+
+  // WLAN-Verbindung
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -116,17 +131,6 @@ void setup(void) {
   Serial.println("");
   Serial.print("Verbunden mit: ");
   Serial.println(ssid);
-*/
-
-  // Access Point-Setup
-  IPAddress local_IP(192,168,4,22);
-  IPAddress gateway(192,168,4,9);
-  IPAddress subnet(255,255,255,0);
-
-  WiFi.softAPConfig(local_IP, gateway, subnet);
-  WiFi.softAP(ssid, password);
-
-  Serial.println("Access Point getstartet!");
 
   // Dateisystem starten
   if(SPIFFS.begin())
@@ -147,10 +151,9 @@ void setup(void) {
 
   Serial.println("HTTP-Server gestartet!"); 
   Serial.print("IP: ");
-  Serial.println(WiFi.softAPIP()); 
-/*
+ /* Serial.println(WiFi.softAPIP()); */
   Serial.println(WiFi.localIP());
-*/
+
   
   // Basisdruck
   for (int i = 0; i < messungen; i++)
@@ -175,15 +178,25 @@ void setup(void) {
   // Hauptcode
   void loop(void) {
 
+    // Timer starten
+    startTime = millis();
+
     // Webserver
     server.handleClient();
     
     // Druck messen
     P = getPressure();
 
+    // Ausgangsstrecke
+    S1 = a;
+
     // Höhenunterschied
     a = pressure.altitude(P, ausgangsdruck);
 
+    // Streckenberechnung
+    S2 = a;
+    deltaS = S2 - S1;
+ 
     // Maximalwerte
     if (a < lowest) lowest = a;
 
@@ -191,7 +204,7 @@ void setup(void) {
 
     // Temperatur messen
     status = pressure.startTemperature();
-    delay(100);
+    delay(status);
     status = pressure.getTemperature(T);
 
     // Höhenunterschied anzeigen
@@ -223,107 +236,16 @@ void setup(void) {
     oled.setCursor(0, 7);
     oled.print("IP: ");
 
-    oled.print(WiFi.softAPIP());
-    
-    /*
+   /* oled.print(WiFi.softAPIP());*/
     oled.print(WiFi.localIP());
-    */
     
     delay(333);
+
+    // Timer stoppen
+    elapsedTime = millis() - startTime;
+    elapsedTime = elapsedTime / 1000;
+
+    // Geschwindigkeit ausrechnen
+    v = deltaS / elapsedTime;
+    
   }
-  
-
-// Webserver
-void handleRoot() {
-  String s = MAIN_page;
-  server.send(200, "text/html", s);
-}
-
-void handleData(){
-  double d = *pointerzwei;
-  double t = millis() / 1000;
-  String teil = String(String(t) + ";");
-  String kombi = String(teil + String(d));
-  server.send(200, "text/plain", kombi);
-}
-
-void handleWebRequests(){
-  if(loadFromSpiffs(server.uri())) return;
-  String message = "File Not Detected\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " NAME:"+server.argName(i) + "\n VALUE:" + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  Serial.println(message);
-}
-
-bool loadFromSpiffs(String path){
-  String dataType = "text/plain";
-  if(path.endsWith("/")) path += "index.htm";
- 
-  if(path.endsWith(".src")) path = path.substring(0, path.lastIndexOf("."));
-  else if(path.endsWith(".html")) dataType = "text/html";
-  else if(path.endsWith(".htm")) dataType = "text/html";
-  else if(path.endsWith(".css")) dataType = "text/css";
-  else if(path.endsWith(".js")) dataType = "application/javascript";
-  else if(path.endsWith(".png")) dataType = "image/png";
-  else if(path.endsWith(".gif")) dataType = "image/gif";
-  else if(path.endsWith(".jpg")) dataType = "image/jpeg";
-  else if(path.endsWith(".ico")) dataType = "image/x-icon";
-  else if(path.endsWith(".xml")) dataType = "text/xml";
-  else if(path.endsWith(".pdf")) dataType = "application/pdf";
-  else if(path.endsWith(".zip")) dataType = "application/zip";
-  File dataFile = SPIFFS.open(path.c_str(), "r");
-  if (server.hasArg("download")) dataType = "application/octet-stream";
-  if (server.streamFile(dataFile, dataType) != dataFile.size()) {
-  }
- 
-  dataFile.close();
-  return true;
-}
-
-
-
-// Funktion getPressure
-double getPressure()
-{
-  // Temperatur messen
-  status = pressure.startTemperature();
-  if (status != 0)
-  {
-    // Warten bis Messung fertig
-    delay(status);
-
-     // Temperatur erhalten
-    status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      
-      // Druck messen
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        // Warten bis Messung fertig
-        delay(status);
-
-        //Druck erhalten
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-          return(P);
-        }
-        else Serial.println("Fehler beim Erhalten des Drucks");
-      }
-      else Serial.println("Fehler beim Starten der Druckmessung");
-    }
-    else Serial.println("Fehler beim Erhalten der Temperatur");
-  }
-  else Serial.println("Fehler beim Starten der Temperaturmessung");
-}
