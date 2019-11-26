@@ -3,7 +3,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 <html>
 <head>
   <title>H&ouml;henmesser</title>
-   <script src = "Chart.min.js"></script>
+   <script src = "http://192.168.178.52/Chart.min.js"></script>
   <style>
   canvas{
     -moz-user-select: none;
@@ -105,8 +105,8 @@ const char MAIN_page[] PROGMEM = R"=====(
   // Graphen nach erhalt neuer Daten aktualisieren
   function updateGraph() {
     graph.data.labels.push(time);
-    graph.data.datasets[0].data.push(data);
-    graph.data.datasets[1].data.push(speed);
+    graph.data.datasets.[0].data.push(data);
+    graph.data.datasets.[1].data.push(speed);
     graph.update();
   }
 
