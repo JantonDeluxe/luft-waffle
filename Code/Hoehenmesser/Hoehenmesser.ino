@@ -1,4 +1,9 @@
 /* Höhenmesser
+  
+  Projektseite:
+  -------------
+  https://jantondeluxe.github.io
+
 
   Hardware:
   ---------
@@ -7,19 +12,17 @@
   Display: GM009605 OLED
 
 
-  Fehlercodes:
-  ------------
-  1 - Fehler beim Erhalten des Drucks
-  2 - Fehler beim Starten der Druckmessung
-  3 - Fehler beim Erhalten der Temperatur
-  4 - Fehler beim Starten der Temperaturmessung
-
+  Disclaimer:
+  -----------
   Basiert teilweise auf dem Sketch BMP180_altitude_example aus der SFE_BMP180-Library:
   V10 Mike Grusin, SparkFun Electronics 10/24/2013
   V1.1.2 Updates for Arduino 1.6.4 5/2015
 
-  Basiert teilweise auf dem Sketch WiFiAccessPoint aus der ESP8266WebServer-Library:
-  Copyright (c) 2015, Majenko Technologies
+  Basiert teilweise auf dem Tutorial "ESP8266 data logging with real time graphs" auf
+  https://circuits4you.com/2019/01/11/esp8266-data-logging-with-real-time-graphs/
+
+
+  Danke an Nick Lamprecht für die Hilfe mit Java Script!
 */
 
 // Libraries
@@ -29,50 +32,64 @@
 #include <SSD1306AsciiWire.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <FS.h> 
 
 // Header
 #include "index.h"
-
-// Objekte
-SFE_BMP180 pressure;
-SSD1306AsciiWire oled;
+#include "csv.h"
 
 // I2C-Adresse OLED
 #define I2C_ADDRESS 0x3C
 
-// Name und Passwort Access Point
-const char *ssid = "Hoehenmesser";  
-const char *password = "***REMOVED***"; 
-
-// Variablen
-double baseline;
-double highest;
-double lowest;
-double T;
-double a;
-double* pointer = &a;
-
-// Webserver-Port setzen
+// Objekte
+SFE_BMP180 pressure;
+SSD1306AsciiWire oled;
 ESP8266WebServer server(80);
 
+// Name und Passwort WLAN oder Access Point
+const char* ssid = "Janky";  
+const char* password = "***REMOVED***"; 
+
+// Kalibrierung: Anzahl der Messungen
+const int messungen = 100;
+
+// Globale Variablen
+double highest;
+double lowest;
+double P;
+double h;
+double T;
+double v;
+double a;
+float startTime;
+float elapsedTime;
+double S1;
+double S2;
+double deltaS;
+
+char status;
+
+float Array[messungen];
+float ausgangsdruck = 0.0;
 
 
 //Setup
 void setup(void) {
 
-  //Datenübertragung
-  Serial.begin(115200);
+  // Serial-Setup
+  Serial.begin(921600);
   delay(100);
   Serial.println("");
-  
-  //Display-Setup
+  Serial.println("Serial gestartet!");
+
+  // I2C-Setup
   Wire.begin();
+  Serial.println("I2C gestartet!");
+
+  //Display-Setup
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
   oled.set400kHz();
   oled.setFont(font5x7);
-  
-  Serial.println("Display gestartet!"); 
-
   oled.clear();
   oled.set2X();
   oled.println("START");
@@ -80,51 +97,80 @@ void setup(void) {
   delay(500);
   oled.clear();
 
+  Serial.println("Display gestartet!"); 
+
   //Sensor-Setup
   if (pressure.begin())
-    Serial.println("BMP180 gefunden!");
+    Serial.println("BMP180 gestartet!");
   else
   {
     Serial.println("BMP180 fehlt!");
     while (1);
   }
 
-  // Access Point
+ /* // Access Point-Setup
+  IPAddress local_IP(192,168,4,22);
+  IPAddress gateway(192,168,4,9);
+  IPAddress subnet(255,255,255,0);
+
+  WiFi.softAPConfig(local_IP, gateway, subnet);
   WiFi.softAP(ssid, password);
-  Serial.println("Access Point gestartet!"); 
+
+  Serial.println("Access Point getstartet!");*/
+
+  // WLAN-Verbindung
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Verbunden mit: ");
+  Serial.println(ssid);
+
+  // Dateisystem starten
+  if(SPIFFS.begin())
+   {
+     Serial.println("SPIFFS gestartet!");
+   }
+   else
+   {
+     Serial.println("SPIFFS nicht gestartet!");
+     while (1);
+    }
 
   // Webserver-Setup
   server.on("/", handleRoot);
-  server.on("/data", handleData);
-  server.onNotFound(handleNotFound);
+//  server.on("/csv", handleCSV);
+  server.on("/readData", handleData);
+  server.onNotFound(handleWebRequests);
   server.begin();
 
   Serial.println("HTTP-Server gestartet!"); 
   Serial.print("IP: ");
-  Serial.println(WiFi.softAPIP());
-  
-  // baseline-Druck messen
-  baseline = getPressure();       // Genauer wäre: 100 getPressure-Werte und dann den Durchschnitt davon als baseline
+ /* Serial.println(WiFi.softAPIP()); */
+  Serial.println(WiFi.localIP());
 
-  // baseline-Druck anzeigen
-  oled.print(baseline);
-  oled.print(" mbar");
- 
-  // statische Teile der Höhenanzeigen
-  oled.setCursor(0, 3);
-  oled.print("Hoehe:");
-  oled.setCursor(0,5);
-  oled.print("Max:");
- 
+  
+  // Basisdruck
+  for (int i = 0; i < messungen; i++)
+  {
+    Array[i] = getPressure();
+  }
+  for (int i = 0; i < messungen; i++)
+  {
+    ausgangsdruck = ausgangsdruck + Array[i];
+  } 
+  ausgangsdruck = ausgangsdruck / messungen;
+  
   }
 
 
   // Hauptcode
   void loop(void) {
 
-    // Variablen
-    double a, P;
-    char status;
+    // Timer starten
+    startTime = millis();
 
     // Webserver
     server.handleClient();
@@ -132,101 +178,36 @@ void setup(void) {
     // Druck messen
     P = getPressure();
 
-    // Temperatur messen
-    status = pressure.startTemperature();
-    delay(100);
-    status = pressure.getTemperature(T);
+    // Ausgangsstrecke
+    S1 = h;
 
     // Höhenunterschied
-    a = pressure.altitude(P, baseline);
+    h = pressure.altitude(P, ausgangsdruck);
 
+    // Streckenberechnung
+    S2 = h;
+    deltaS = S2 - S1;
+ 
     // Maximalwerte
-    if (a < lowest) lowest = a;
+    if (h < lowest) lowest = h;
 
-    if (a > highest) highest = a;
+    if (h > highest) highest = h;
 
-    // Höhenunterschied anzeigen
-    oled.set2X();
-    oled.setCursor(40, 2);               
-    if (a >= 0.0) oled.print(" ");      
-    oled.print(a);
-    oled.print("m");
-
-    // Maximum anzeigen
-    oled.setCursor(40, 4);               
-    if (highest >= 0.0) oled.print(" ");
-    oled.print(highest);
-    oled.print("m");
-    oled.set1X();
-
-    // Temperaturanzeige
-    oled.setCursor(80, 0);
-    oled.print(T);
-    oled.println(" C");
-
-    // IP-Adresse anzeigen
-    oled.setCursor(0, 7);
-    oled.print("IP: ");
-    oled.print(WiFi.softAPIP());
-    
-    delay(500);
-  }
-  
-
-// Webserver
-void handleRoot() {
- String s = MAIN_page;
- server.send(200, "text/html", s);
-}
-
-void handleData(){
-  double d = *pointer ;
-  String data = String(d);
-  server.send(200, "text/plane", data);
-}
-
-void handleNotFound(){              
-  server.send(404, "text/plain", "404: Not found"); 
-}
-
-
-// Funktion getPressure()
-double getPressure()
-{
-  // Variablen
-  char status;
-  double T,P,p0,a;
-  
-  // Temperatur messen
-  status = pressure.startTemperature();
-  if (status != 0)
-  {
-    // Warten bis Messung fertig
+    // Temperatur messen
+    status = pressure.startTemperature();
     delay(status);
-
-     // Temperatur erhalten
     status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      
-      // Druck messen mit Genauigkeitsstufe 3
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        // Warten bis Messung fertig
-        delay(status);
 
-        //Druck erhalten
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-          return(P);
-        }
-        else oled.println("Fehler 1");
-      }
-      else oled.println("Fehler 2");
-    }
-    else oled.println("Fehler 3");
+    anzeige();
+    
+    delay(0);
+    
+    // Timer stoppen
+    elapsedTime = millis() - startTime;
+    elapsedTime = elapsedTime / 1000;
+
+    // Geschwindigkeit und Beschleunigung ausrechnen
+    v = deltaS / elapsedTime;
+    a = (2*deltaS) / (elapsedTime*elapsedTime); 
+    
   }
-  else oled.println("Fehler 4");
-}
