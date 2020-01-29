@@ -2,18 +2,21 @@
 
 // Hauptseite
 void handleRoot() {
+  Serial.print("Website abgerufen.");
   String s = MAIN_page;
+  Serial.print("Website abgerufen 2.");
   server.send(200, "text/html", s);
 }
 
 // Datenübertragung
 void handleData(){
   double t = millis() / 1000;
-  double d = *pointerzwei;
   String teil1 = String(String(t) + ";");
-  String teil2 = String(teil1 + String(d));
+  String teil2 = String(teil1 + String(h));
   String teil3 = String(teil2 + ";");
-  String kombi = String(teil3 + String(v));
+  String teil4 = String(teil3 + String(v));
+  String teil5 = String(teil4 + ";");
+  String kombi = String(teil5 + String(a));
   server.send(200, "text/plain", kombi);
 }
 
