@@ -1,4 +1,4 @@
-const char MAIN_page[] PROGMEM = R"=====(
+const char MAIN_page[] = R"=====(
 <!doctype html>
 <html>
 <head>
@@ -13,7 +13,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 
   // Tabelle
   #dataTable {
-    font-family: "Verdana", Arial, Helvetica, sans-serif;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
   }
@@ -38,18 +38,21 @@ const char MAIN_page[] PROGMEM = R"=====(
 </head>
 
 <body>
+
     <div style="text-align:center;">
     <h1 style="font-family:verdana;color:#999999">H&ouml;henmesser</h1>
     </div>
     <div class="chart-container" style="position: relative; height:350px; width:100%">
         <canvas id="Chart" width="400" height="400"></canvas>
     </div>
+
+    
 <div>
   <table id="dataTable">
     <tr><th>Zeit</th><th>H&ouml;he</th><th>Geschwindigkeit</th><th>Beschleunigung</th></tr>
   </table>
 </div>
-
+ 
 <script>
   var data = [];
   var speed = [];
@@ -64,7 +67,7 @@ const char MAIN_page[] PROGMEM = R"=====(
     graph = new Chart(ctx, {
       type: 'line',
         data: {
-        labels: [time],  // X-Achse 
+        labels: [time],  //Bottom Labeling
         datasets: [
         {
           label: "H\u00f6he in m",
@@ -77,15 +80,15 @@ const char MAIN_page[] PROGMEM = R"=====(
           label: "Geschwindigkeit in m/s",
           fill: false,  
           backgroundColor: 'rgba(0, 140, 192, 1)',
-          borderColor: 'rgba(0, 140, 192, 1)', 
-          data: null, 
+          borderColor: 'rgba(0, 140, 192, 1)',
+          data: null,
           hidden: true,
           },
           {
-          label: "Beschleunigung in m/s\u00B2",
+          label: "Beschleunigung in m/s^2",
           fill: false,  
-          backgroundColor: 'rgba(38, 223, 59, 1)', 
-          borderColor: 'rgba(38, 223, 59, 1)', 
+          backgroundColor: 'rgba(123, 219, 48, 0.85)',
+          borderColor: 'rgba(123, 219, 48, 0.85)',
           data: null,
           hidden: true,
         }],
@@ -98,7 +101,8 @@ const char MAIN_page[] PROGMEM = R"=====(
           maintainAspectRatio: false,
           elements: {
             line: {
-              tension: 0.0 // Rundung des Graphen
+              tension: 0.2 //Smoothening (Curved) of data lines
+            }
           },
           scales: {
             yAxes: [{
@@ -120,15 +124,15 @@ const char MAIN_page[] PROGMEM = R"=====(
     graph.update();
   }
 
-  // Beim Starten der Seite Graphen anzeigen
+  //Beim Starten der Seite Graphen anzeigen
   window.onload = function() {
     addGraph();
   };
 
-  // Update-Geschwindigkeit (429 ms)
+  // Update-Geschwindigkeit (100 ms) NOCHMAL ANPASSEN!
   setInterval(function() {
     getData();
-  }, 100); 
+  }, 200); 
 
   // Daten unter /readData abrufen
   function getData() {
@@ -156,7 +160,33 @@ const char MAIN_page[] PROGMEM = R"=====(
     xhttp.open("GET", "readData", true);
     xhttp.send();
   }
+
+
+   // Dieses Array sollte die Daten für das CSV enthalten (klappt so aber nicht)
+   var csvdata = [
+       [time, data, speed],
+    ];
+     
+
+    // CSV erstellen und herunterladen
+    function download_csv() {
+        var csv = 'Zeit,Hoehe,Geschwindigkeit\n';
+        csvdata.forEach(function(row) {
+                csv += row.join(',');
+                csv += "\n";
+        });
+     
+        console.log(csv);
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'data.csv';
+        hiddenElement.click();
+    }
+     
+    
 </script>
+
 </body>
 
 </html>

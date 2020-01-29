@@ -56,14 +56,15 @@ const int messungen = 100;
 double highest;
 double lowest;
 double P;
-double a;
+double h;
 double T;
 double v;
-float startTime;
-float elapsedTime;
+double a;
 double S1;
 double S2;
 double deltaS;
+float startTime;
+float elapsedTime;
 
 double* pointereins = &T;
 double* pointerzwei = &a;
@@ -188,19 +189,19 @@ void setup(void) {
     P = getPressure();
 
     // Ausgangsstrecke
-    S1 = a;
+    S1 = h;
 
     // Höhenunterschied
-    a = pressure.altitude(P, ausgangsdruck);
+    h = pressure.altitude(P, ausgangsdruck);
 
     // Streckenberechnung
-    S2 = a;
+    S2 = h;
     deltaS = S2 - S1;
  
     // Maximalwerte
-    if (a < lowest) lowest = a;
+    if (h < lowest) lowest = h;
 
-    if (a > highest) highest = a;
+    if (h > highest) highest = h;
 
     // Temperatur messen
     status = pressure.startTemperature();
@@ -210,8 +211,8 @@ void setup(void) {
     // Höhenunterschied anzeigen
     oled.set2X();
     oled.setCursor(40, 2);               
-    if (a >= 0.0) oled.print(" ");      
-    oled.print(a);
+    if (h >= 0.0) oled.print(" ");      
+    oled.print(h);
     oled.print("m");
 
     // Maximum anzeigen
@@ -229,7 +230,7 @@ void setup(void) {
     // Temperaturanzeige
     oled.setCursor(79, 0);
     if (a >= 0.0) oled.print(" ");
-    oled.print(*pointereins);
+    oled.print(T);
     oled.println(" C");
 
     // IP-Adresse anzeigen
@@ -247,5 +248,5 @@ void setup(void) {
 
     // Geschwindigkeit ausrechnen
     v = deltaS / elapsedTime;
-    
+    a = (2*deltaS) / (elapsedTime*elapsedTime); 
   }

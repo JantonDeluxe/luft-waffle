@@ -3,11 +3,7 @@
 // Hauptseite
 void handleRoot() {
   String s = MAIN_page;
-  server.send(200, "text/html", s);
-}
-
-void handleCSV() {
-  String s = CSV_page;
+      Serial.println("Website aufgerufen");
   server.send(200, "text/html", s);
 }
 
@@ -21,6 +17,7 @@ void handleData(){
   String teil5 = String(teil4 + ";");
   String kombi = String(teil5 + String(a));
   server.send(200, "text/plain", kombi);
+  Serial.println("Daten gesendet!");
 }
 
 // Dateien oder unbekannt

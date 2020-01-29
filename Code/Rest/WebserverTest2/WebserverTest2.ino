@@ -53,11 +53,11 @@ void setup() {
 
   if(SPIFFS.format())
   {
-    Serial.println("Formatierung: OK!")
+    Serial.println("Formatierung: OK!");
   }
   else
   {
-    Serial.println("Formatierung: Fehler!")
+    Serial.println("Formatierung: Fehler!");
   }
 
 

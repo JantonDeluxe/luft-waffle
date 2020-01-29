@@ -30,13 +30,15 @@
 #include <Wire.h>
 #include <SSD1306Ascii.h>
 #include <SSD1306AsciiWire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
 #include <ESP8266WebServer.h>
 #include <FS.h> 
 
 // Header
 #include "index.h"
-#include "csv.h"
 
 // I2C-Adresse OLED
 #define I2C_ADDRESS 0x3C
@@ -45,8 +47,9 @@
 SFE_BMP180 pressure;
 SSD1306AsciiWire oled;
 ESP8266WebServer server(80);
+ESP8266WiFiMulti wifiMulti; 
 
-// Name und Passwort WLAN oder Access Point
+// Name und Passwort Access Point
 const char* ssid = "Janky";  
 const char* password = "***REMOVED***"; 
 
@@ -66,7 +69,6 @@ float elapsedTime;
 double S1;
 double S2;
 double deltaS;
-
 char status;
 
 float Array[messungen];
@@ -77,7 +79,7 @@ float ausgangsdruck = 0.0;
 void setup(void) {
 
   // Serial-Setup
-  Serial.begin(921600);
+  Serial.begin(115200);
   delay(100);
   Serial.println("");
   Serial.println("Serial gestartet!");
@@ -96,7 +98,6 @@ void setup(void) {
   oled.set1X();
   delay(500);
   oled.clear();
-
   Serial.println("Display gestartet!"); 
 
   //Sensor-Setup
@@ -108,17 +109,7 @@ void setup(void) {
     while (1);
   }
 
- /* // Access Point-Setup
-  IPAddress local_IP(192,168,4,22);
-  IPAddress gateway(192,168,4,9);
-  IPAddress subnet(255,255,255,0);
-
-  WiFi.softAPConfig(local_IP, gateway, subnet);
-  WiFi.softAP(ssid, password);
-
-  Serial.println("Access Point getstartet!");*/
-
-  // WLAN-Verbindung
+  // Netzwerk-Verbindung
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -127,7 +118,22 @@ void setup(void) {
   Serial.println("");
   Serial.print("Verbunden mit: ");
   Serial.println(ssid);
+  
+  /*else
+   {
+    IPAddress local_IP(192,168,4,22);
+    IPAddress gateway(192,168,4,9);
+    IPAddress subnet(255,255,255,0);
 
+    WiFi.softAPConfig(local_IP, gateway, subnet);
+    WiFi.softAP(ssid, password);
+
+    AP = true;
+
+    Serial.println("Access Point getstartet!");
+   }
+  */
+ 
   // Dateisystem starten
   if(SPIFFS.begin())
    {
@@ -141,16 +147,16 @@ void setup(void) {
 
   // Webserver-Setup
   server.on("/", handleRoot);
-//  server.on("/csv", handleCSV);
   server.on("/readData", handleData);
   server.onNotFound(handleWebRequests);
   server.begin();
 
   Serial.println("HTTP-Server gestartet!"); 
   Serial.print("IP: ");
- /* Serial.println(WiFi.softAPIP()); */
+ 
   Serial.println(WiFi.localIP());
-
+ 
+  // Serial.println(WiFi.softAPIP());
   
   // Basisdruck
   for (int i = 0; i < messungen; i++)
@@ -162,6 +168,8 @@ void setup(void) {
     ausgangsdruck = ausgangsdruck + Array[i];
   } 
   ausgangsdruck = ausgangsdruck / messungen;
+
+  Serial.println("Ausgangsdruck berechnet!");
   
   }
 
@@ -174,6 +182,7 @@ void setup(void) {
 
     // Webserver
     server.handleClient();
+    Serial.println("Auf HTTP-Requests warten...");
     
     // Druck messen
     P = getPressure();
@@ -198,9 +207,11 @@ void setup(void) {
     delay(status);
     status = pressure.getTemperature(T);
 
+    // Werte anzeigen
     anzeige();
-    
-    delay(0);
+
+    // Mögliche Verzögerung
+    delay(100);
     
     // Timer stoppen
     elapsedTime = millis() - startTime;

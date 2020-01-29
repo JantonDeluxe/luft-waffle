@@ -32,13 +32,14 @@ void anzeige() {
     if (a >= 0.0) oled.print(" ");
     oled.print(T);
     oled.setCursor(115, 0);
-    oled.println(" C");
+    oled.println(" C ");
 
     // IP-Adresse
     oled.setCursor(0, 7);
     oled.print("IP: ");
 
-   /* oled.print(WiFi.softAPIP());*/
-    oled.print(WiFi.localIP());
+    oled.println(WiFi.localIP());
+    // oled.println(WiFi.softAPIP());
+
 
    }
