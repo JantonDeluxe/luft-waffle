@@ -4,9 +4,11 @@
 <html>
   <head>
     <title>About - H&ouml;henmesser</title>
+   
     <style>
         ul {
             list-style-type: none;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -43,9 +45,9 @@
   </head>
   <body>
     <ul>
-      <li>
-        <a class= href="/">Home</a>
-      </li>
+      
+       <li><a href="/">Home</a></li>
+      
       <li>
         <a href="/chart">Vorschau</a>
       </li>
@@ -53,9 +55,8 @@
         <a class="active" href="/about">About</a>
       </li>
     </ul>
-    <h1style="font-family:verdana;font-size:250%;color:white;text-align:left;">I bims 1 Platzhalter!
-    </h1>
-    <h2 style="font-family:verdana;font-size:250%;color:black;text-align:left;">About</h2>
+    
+    <h1 style="font-family:verdana;font-size:250%;color:black;text-align:left;padding-top:30px;">About</h1>
     <p>
       <div style="font-family:verdana;text-align:left;">
         <h3>H&ouml;henmesser 2.0</h3>

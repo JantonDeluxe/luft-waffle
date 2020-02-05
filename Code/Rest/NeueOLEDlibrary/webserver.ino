@@ -10,13 +10,15 @@ void handleRoot() {
 // Messung starten, Redirect auf ChartPage
 void handleStart() {
   startstop = true;
+  highest = 0;
   Serial.println("Messung gestartet!");
   server.sendHeader("Location", "/chart");
   server.send(303);
 }
 
 // Messung stoppen, Redirect auf StartPage
-void handleStopp() {
+void handleStopp(){
+  timer = 1800;
   startstop = false;
   Serial.println("Messung gestoppt!");
   server.sendHeader("Location", "/");
@@ -31,10 +33,18 @@ void handleChart() {
 }
 
 // About-Seite
-void handleAbout(){
+void handleAbout() {
   String s = AboutPage;
   Serial.println("About-Seite aufgerufen");
   server.send(200, "text/html", s);
+}
+
+// Manuelle Kalibrierung mit Redirect auf StartPage
+void handleCalibration() {
+  calculateBasePressure();
+  Serial.println("Ausgangsdruck neu berechnet!");
+  server.sendHeader("Location", "/");
+  server.send(303);
 }
 
 // Datenübertragung
@@ -45,9 +55,14 @@ void handleData() {
   String teil3 = String(teil2 + ";");
   String teil4 = String(teil3 + String(v));
   String teil5 = String(teil4 + ";");
-  String kombi = String(teil5 + String(a));
+  String teil6 = String(teil5 + String(a));
+  String teil7 = String(teil6 + ";");
+  String teil8 = String(teil7 + String(highest));
+  String teil9 = String(teil8 + ";");
+  String teil10 = String(teil9 + String(Temp));
+  String teil11 = String(teil10 + ";");
+  String kombi = String(teil11 + String(timer / 100 / 6));
   server.send(200, "text/plain", kombi);
-  Serial.println("Daten gesendet!");
 }
 
 // Unbekannte URI: Datei oder Error 404
@@ -68,6 +83,7 @@ void handleWebRequests() {
   Serial.println(message);
 }
 
+// dataType der angeforderten Datei bestimmen
 bool loadFromSpiffs(String path) {
   String dataType = "text/plain";
   if (path.endsWith("/")) path += "index.htm";

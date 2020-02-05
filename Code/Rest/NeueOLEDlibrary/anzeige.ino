@@ -38,10 +38,10 @@ void anzeige() {
   display.print(Temp);
   display.println(" C ");
 
-  // Geschwindigkeit
+  // untere Zeile
   display.setCursor(0, 56);
-  display.print(lowestV);
-  display.print(" m/s");
+  display.print("IP: ");
+  display.print(WiFi.localIP());
 
   // anzeigen
   display.display();

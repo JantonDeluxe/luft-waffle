@@ -58,7 +58,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Dis
 ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
-const char* ssid = "Janky";
+const char* ssid = "MyNetwork";
 const char* password = "***REMOVED***";
 
 // Kalibrierung: Anzahl der Messungen
@@ -97,31 +97,10 @@ void setup() {
   Serial.println("");
   Serial.println("Serial gestartet!");
 
+
   // I2C-Setup
   Wire.begin();
   Serial.println("I2C gestartet!");
-
-  // Dateisystem starten
-  if (SPIFFS.begin())
-  {
-    Serial.println("SPIFFS gestartet!");
-  }
-  else
-  {
-    Serial.println("SPIFFS nicht gestartet!");
-    while (1);
-  }
-
-  // RTC-Setup
-  if (RTC.begin())
-    Serial.println("RTC gestartet!");
-  else
-  {
-    Serial.println("RTC nicht gestartet!");
-    while (1);
-  }
-
-  RTC.adjust(DateTime((__DATE__), (__TIME__)));
 
 
   // Display-Setup
@@ -136,12 +115,39 @@ void setup() {
   drawSplashscreen();
 
 
+
+  // Dateisystem starten
+  if (SPIFFS.begin())
+  {
+    Serial.println("SPIFFS gestartet!");
+  }
+  else
+  {
+    Serial.println("SPIFFS nicht gestartet!");
+    display.clearDisplay();
+    while (1);
+  }
+
+  // RTC-Setup
+  if (RTC.begin())
+    Serial.println("RTC gestartet!");
+  else
+  {
+    Serial.println("RTC nicht gestartet!");
+    display.clearDisplay();
+    while (1);
+  }
+
+  RTC.adjust(DateTime((__DATE__), (__TIME__)));
+
+
   //Sensor-Setup
   if (pressure.begin())
     Serial.println("BMP180 gestartet!");
   else
   {
     Serial.println("BMP180 fehlt!");
+    display.clearDisplay();
     while (1);
   }
 
@@ -177,6 +183,7 @@ void setup() {
   server.on("/stopp", handleStopp);
   server.on("/chart", handleChart);
   server.on("/about", handleAbout);
+  server.on("/calibrate", handleCalibration);
   server.on("/readData", handleData);
   server.onNotFound(handleWebRequests);
 
@@ -286,13 +293,13 @@ void loop() {
   v = deltaS / deltaT;
   a = (2 * deltaS) / (deltaT * deltaT);
 
-  // Timer
-  Serial.println(startstop);
-
-  /* if (startstop = true)
-     timer = timer - 1;
-     Serial.println(timer);
-  */
+  // Messung gestartet
+  if (startstop == true) {
+    timer = timer - 1;
+     if (timer == 0) {
+      startstop = false;
+    }
+  }
 
   //if (a > 20)
   //  timer = 600
