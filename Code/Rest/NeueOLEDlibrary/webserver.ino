@@ -17,8 +17,8 @@ void handleStart() {
 }
 
 // Messung stoppen, Redirect auf StartPage
-void handleStopp(){
-  timer = 1800;
+void handleStopp() {
+  timer = 200;
   startstop = false;
   Serial.println("Messung gestoppt!");
   server.sendHeader("Location", "/");

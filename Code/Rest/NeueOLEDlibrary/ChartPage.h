@@ -226,6 +226,7 @@
             // Beenden einer Messuung
             if (timer == 0) {
               window.location.replace("stopp");
+              }
         }, 115);
 
         // Daten unter /readData abrufen
@@ -250,14 +251,7 @@
             xhttp.open("GET", "readData", true);
             xhttp.send();
 
-          
             }
-        }
-
-
-         
-
-       
        
     </script>
 
