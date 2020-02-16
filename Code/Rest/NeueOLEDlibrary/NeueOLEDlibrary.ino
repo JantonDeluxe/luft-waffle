@@ -58,8 +58,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Dis
 ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
-const char* ssid = "MyNetwork";
-const char* password = "Kaiqu2ah";
+const char* ssid = "Janky";
+const char* password = "6zhnJI9ol.";
 
 // Kalibrierung: Anzahl der Messungen
 const int measurements = 100;
@@ -75,7 +75,7 @@ double S1;
 double S2;
 double deltaS;
 double del = 0;
-double timer = 1800;
+double timer = 200;
 double lowestV;
 
 bool startstop = false;
@@ -86,6 +86,7 @@ float Array[measurements];
 float P0 = 0.0;
 
 char status;
+
 
 
 // Setup
@@ -105,15 +106,21 @@ void setup() {
 
   // Display-Setup
   if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+    {
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.cp437(true);          // font
+    display.setCursor(0, 0);
     Serial.println("Display gestartet!");
+   }
   else
   {
     Serial.println("Display nicht gefunden!");
     while (1);
   }
 
-  drawSplashscreen();
-
+  drawLoadingscreen1();
 
 
   // Dateisystem starten
@@ -125,8 +132,14 @@ void setup() {
   {
     Serial.println("SPIFFS nicht gestartet!");
     display.clearDisplay();
+    display.print("SPIFFS nicht gestartet!");
+    delay(1000);
+    display.clearDisplay();
     while (1);
   }
+
+  drawLoadingscreen2();
+
 
   // RTC-Setup
   if (RTC.begin())
@@ -135,10 +148,18 @@ void setup() {
   {
     Serial.println("RTC nicht gestartet!");
     display.clearDisplay();
+    display.print("RTC nicht gestartet!");
+    delay(1000);
+    display.clearDisplay();
     while (1);
   }
 
-  RTC.adjust(DateTime((__DATE__), (__TIME__)));
+  if (! RTC.isrunning()) {
+    Serial.println("RTC bisher noch nicht gesetzt!");
+    RTC.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+
+  drawLoadingscreen3();
 
 
   //Sensor-Setup
@@ -148,8 +169,14 @@ void setup() {
   {
     Serial.println("BMP180 fehlt!");
     display.clearDisplay();
+    display.print("BMP180 fehlt!");
+    delay(1000);
+    display.clearDisplay();
     while (1);
   }
+
+  drawLoadingscreen4();
+
 
   // Basisdruck
   for (int i = 0; i < measurements; i++)
@@ -164,6 +191,8 @@ void setup() {
 
   Serial.println("Ausgangsdruck berechnet!");
 
+  drawLoadingscreen5();
+
 
   // WLAN-Verbindung
   WiFi.begin(ssid, password);
@@ -172,9 +201,13 @@ void setup() {
     Serial.print(".");
   }
 
+  drawLoadingscreen6();
+
   Serial.println("");
   Serial.print("Verbunden mit: ");
   Serial.println(ssid);
+
+  drawLoadingscreen7();
 
 
   // Webserver-Setup
@@ -194,24 +227,28 @@ void setup() {
   /* Serial.println(WiFi.softAPIP()); */
   Serial.println(WiFi.localIP());
 
+  drawLoadingscreen8();
 
-  /* // SD-Setup
+
+      // CS-Pin als Ausgang konfigurieren
     pinMode(CS, OUTPUT);
-
-    if (SD.begin(CS))
-    Serial.println("SD-Karte gestartet!");
-    else
-    {
-    Serial.println("SD-Karte fehlt!");
-    while (1);
+    // SD-Karte initialisieren
+    Serial.print("\r\nInitialisiere SD-Karte...");
+    if (!SD.begin(CS)) {
+        Serial.println(" fehlgeschlagen!");
+        // Setup-Funktion verlassen
+        return;
     }
-
-
-      File target = SD.open("text.txt", FILE_WRITE);
-      //Wenn das File existiert dann....
+    Serial.println(" fertig.");
+    //Versucht die Datei "text.txt" zu im Modus FILE_WRITE zu öffnen.
+    //Es gibt noch den Modus FILE_READ für nur lese Zugriff.
+    //Wenn kein Modus angegeben wurde dann wird die Datei immer im FILE_READ Modus geöffnet.
+    //Wenn die Datei "text.txt" nicht gefunden wurde dann wird diese erzeugt.
+    File target = SD.open("text.txt", FILE_WRITE);
+    //Wenn das File existiert dann....
     if (target) {
         Serial.print("Datei 'text.txt' gefunden.");
-        //Eine neue Zeile an die Datei anhängen.
+        //Eine neue Zeile an die Datei anhängen. 
         //Diese Zeile wird an das Ende der Datei angehängt.
         target.println("Test, Test. 1, 2, 3.");
         //Nach dem Schreiben nicht vergessen den Zugriff
@@ -221,11 +258,39 @@ void setup() {
     else {
         //Wenn die Datei nicht geöffnet werden kann, dann soll eine Fehlermeldung
         //ausgegeben werden.
-        //Ein möglicher Fehler kann sein dass, die Datei bereits durch einen anderen
+        //Ein möglicher Fehler kann sein dass, die Datei bereits durch einen anderen 
         //Service geöffnet wurde.
         Serial.println("Fehler beim Öffnen von text.txt.");
     }
+    
+  drawLoadingscreen9();
+
+  /*  File target = SD.open("text.txt", FILE_WRITE);
+    //Wenn das File existiert dann....
+    if (target) {
+      Serial.print("Datei 'text.txt' gefunden.");
+      //Eine neue Zeile an die Datei anhängen.
+      //Diese Zeile wird an das Ende der Datei angehängt.
+      target.println("Test, Test. 1, 2, 3.");
+      //Nach dem Schreiben nicht vergessen den Zugriff
+      //auf die Datei zu schließen.
+      target.close();
+    }
+    else {
+      //Wenn die Datei nicht geöffnet werden kann, dann soll eine Fehlermeldung
+      //ausgegeben werden.
+      //Ein möglicher Fehler kann sein dass, die Datei bereits durch einen anderen
+      //Service geöffnet wurde.
+      Serial.println("Fehler beim Öffnen von text.txt.");
+
+    }
   */
+  drawLoadingscreen10();
+
+
+  drawSplashscreen();
+  delay(1500);
+  display.clearDisplay();
 }
 
 
@@ -296,7 +361,7 @@ void loop() {
   // Messung gestartet
   if (startstop == true) {
     timer = timer - 1;
-     if (timer == 0) {
+    if (timer == 0) {
       startstop = false;
     }
   }

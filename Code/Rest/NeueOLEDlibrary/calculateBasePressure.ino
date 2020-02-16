@@ -1,6 +1,9 @@
 /* Basisdruck (P0) berechnen*/
 
 double calculateBasePressure() {
+
+  P0 = 0.0;
+  
   for (int i = 0; i < measurements; i++)
   {
     Array[i] = getPressure();
