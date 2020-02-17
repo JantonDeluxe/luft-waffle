@@ -1,4 +1,4 @@
-﻿const char ChartPage[] = R"=====(
+const char ChartPage[] = R"=====(
 
 <!DOCTYPE html>
 <html>

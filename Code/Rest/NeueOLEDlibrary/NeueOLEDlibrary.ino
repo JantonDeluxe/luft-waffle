@@ -49,7 +49,7 @@
 #define OLED_RESET -1 // -1, da kein Reset-Pin vorhanden
 
 // Chip Select-PIN (CS-Pin) für SD-Karte definieren
-#define CS D8
+#define CS D2
 
 // Objekte
 SFE_BMP180 pressure;
@@ -87,6 +87,8 @@ float P0 = 0.0;
 
 char status;
 
+String data;
+
 
 
 // Setup
@@ -106,14 +108,14 @@ void setup() {
 
   // Display-Setup
   if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-    {
+  {
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(WHITE);
     display.cp437(true);          // font
     display.setCursor(0, 0);
     Serial.println("Display gestartet!");
-   }
+  }
   else
   {
     Serial.println("Display nicht gefunden!");
@@ -179,15 +181,7 @@ void setup() {
 
 
   // Basisdruck
-  for (int i = 0; i < measurements; i++)
-  {
-    Array[i] = getPressure();
-  }
-  for (int i = 0; i < measurements; i++)
-  {
-    P0 = P0 + Array[i];
-  }
-  P0 = P0 / measurements;
+  calculateBasePressure();
 
   Serial.println("Ausgangsdruck berechnet!");
 
@@ -230,61 +224,10 @@ void setup() {
   drawLoadingscreen8();
 
 
-      // CS-Pin als Ausgang konfigurieren
-    pinMode(CS, OUTPUT);
-    // SD-Karte initialisieren
-    Serial.print("\r\nInitialisiere SD-Karte...");
-    if (!SD.begin(CS)) {
-        Serial.println(" fehlgeschlagen!");
-        // Setup-Funktion verlassen
-        return;
-    }
-    Serial.println(" fertig.");
-    //Versucht die Datei "text.txt" zu im Modus FILE_WRITE zu öffnen.
-    //Es gibt noch den Modus FILE_READ für nur lese Zugriff.
-    //Wenn kein Modus angegeben wurde dann wird die Datei immer im FILE_READ Modus geöffnet.
-    //Wenn die Datei "text.txt" nicht gefunden wurde dann wird diese erzeugt.
-    File target = SD.open("text.txt", FILE_WRITE);
-    //Wenn das File existiert dann....
-    if (target) {
-        Serial.print("Datei 'text.txt' gefunden.");
-        //Eine neue Zeile an die Datei anhängen. 
-        //Diese Zeile wird an das Ende der Datei angehängt.
-        target.println("Test, Test. 1, 2, 3.");
-        //Nach dem Schreiben nicht vergessen den Zugriff
-        //auf die Datei zu schließen.
-        target.close();
-    }
-    else {
-        //Wenn die Datei nicht geöffnet werden kann, dann soll eine Fehlermeldung
-        //ausgegeben werden.
-        //Ein möglicher Fehler kann sein dass, die Datei bereits durch einen anderen 
-        //Service geöffnet wurde.
-        Serial.println("Fehler beim Öffnen von text.txt.");
-    }
-    
+
   drawLoadingscreen9();
 
-  /*  File target = SD.open("text.txt", FILE_WRITE);
-    //Wenn das File existiert dann....
-    if (target) {
-      Serial.print("Datei 'text.txt' gefunden.");
-      //Eine neue Zeile an die Datei anhängen.
-      //Diese Zeile wird an das Ende der Datei angehängt.
-      target.println("Test, Test. 1, 2, 3.");
-      //Nach dem Schreiben nicht vergessen den Zugriff
-      //auf die Datei zu schließen.
-      target.close();
-    }
-    else {
-      //Wenn die Datei nicht geöffnet werden kann, dann soll eine Fehlermeldung
-      //ausgegeben werden.
-      //Ein möglicher Fehler kann sein dass, die Datei bereits durch einen anderen
-      //Service geöffnet wurde.
-      Serial.println("Fehler beim Öffnen von text.txt.");
-
-    }
-  */
+ 
   drawLoadingscreen10();
 
 
@@ -368,5 +311,21 @@ void loop() {
 
   //if (a > 20)
   //  timer = 600
+
+  double t = millis() / 1000;
+  String teil1 = String(String(t) + ";");
+  String teil2 = String(teil1 + String(h));
+  String teil3 = String(teil2 + ";");
+  String teil4 = String(teil3 + String(v));
+  String teil5 = String(teil4 + ";");
+  String teil6 = String(teil5 + String(a));
+  String teil7 = String(teil6 + ";");
+  String teil8 = String(teil7 + String(highest));
+  String teil9 = String(teil8 + ";");
+  String teil10 = String(teil9 + String(Temp));
+
+  data = data + teil10;
+
+  Serial.println(data);
 
 }
