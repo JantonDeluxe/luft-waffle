@@ -49,7 +49,7 @@ void handleCalibration() {
 
 // Datenübertragung
 void handleData() {
-  double t = millis() / 1000;
+  double t = millis();
   String teil1 = String(String(t) + ";");
   String teil2 = String(teil1 + String(h));
   String teil3 = String(teil2 + ";");

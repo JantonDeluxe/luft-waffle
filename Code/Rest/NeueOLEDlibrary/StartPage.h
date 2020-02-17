@@ -1,8 +1,7 @@
-﻿const char StartPage[]  = R"=====(
+﻿const char StartPage[] = R"=====(
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Home - H&ouml;henmesser</title>
     <style>

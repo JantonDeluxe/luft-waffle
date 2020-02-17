@@ -37,6 +37,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
+
 // Header
 #include "StartPage.h"
 #include "ChartPage.h"
@@ -55,10 +56,10 @@ RTC_DS1307 RTC;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 ESP8266WebServer server(80);
 
+
 // Name und Passwort WLAN oder Access Point
 const char* ssid = "Janky";
 const char* password = "6zhnJI9ol.";
-
 
 // Kalibrierung: Anzahl der Messungen
 const int measurements = 100;
@@ -328,5 +329,7 @@ void loop() {
 
   Serial.println(data);
   */
+
+  
 
 }
