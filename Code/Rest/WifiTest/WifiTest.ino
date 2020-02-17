@@ -5,14 +5,16 @@ ESP8266WiFiMulti wifiMulti;
 
 char NetworkStatus;
 const char* ssid = "Hoehenmesser";
-const char* password = "BoschBMP180";
+const char* password = "***REMOVED***";
+
 
 void setup() {
   Serial.begin(9600);
   delay(10);
   Serial.println('\n');
 
-  wifiMulti.addAP("Janky", "6zhnJI9ol.");
+  wifiMulti.addAP("Janky", "***REMOVED***");
+
 
   NetworkStatus = wifiMulti.run();
   Serial.println("Mit Netzwerk verbinden...");

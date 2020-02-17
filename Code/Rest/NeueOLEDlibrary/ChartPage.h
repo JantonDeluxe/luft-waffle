@@ -1,4 +1,5 @@
-const char ChartPage[] = R"=====(
+﻿const char ChartPage[] = R"=====(
+
 
 <!DOCTYPE html>
 <html>
@@ -137,6 +138,38 @@ const char ChartPage[] = R"=====(
       <button class="button button2">Stopp</button>
     </form>
 
+    <table id="dataTable" class="table">
+        <thead>
+            <tr>
+                <th>Hoehe</th>
+                <th>Zeit</th>
+            </tr>
+        </thead>
+    </table>
+
+    <button id="btnExportToCsv" type="button" class="button">Export to CSV</button>
+
+    <script>
+        const dataTable = document.getElementById("dataTable");
+        const btnExportToCsv = document.getElementById("btnExportToCsv");
+
+        btnExportToCsv.addEventListener("click", () => {
+            const exporter = new TableCSVExporter(dataTable);
+            const csvOutput = exporter.convertToCSV();
+            const csvBlob = new Blob([csvOutput], { type: "text/csv" });
+            const blobUrl = URL.createObjectURL(csvBlob);
+            const anchorElement = document.createElement("a");
+
+            anchorElement.href = blobUrl;
+            anchorElement.download = "table-export.csv";
+            anchorElement.click();
+
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+            }, 500);
+        });
+    </script>
+
     
     <script>
         var data = [];
@@ -245,6 +278,13 @@ const char ChartPage[] = R"=====(
                     document.getElementById("temp").innerHTML = response[5];
                     document.getElementById("timer").innerHTML = response[6];
                     
+                    var table = document.getElementById("dataTable");
+                    var row = table.insertRow(1); //Add after headings
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    cell1.innerHTML = time;
+                    cell2.innerHTML = data;
+        
                     updateGraph();
                 }
             };

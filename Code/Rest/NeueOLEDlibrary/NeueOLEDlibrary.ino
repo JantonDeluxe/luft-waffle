@@ -48,18 +48,17 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1 // -1, da kein Reset-Pin vorhanden
 
-// Chip Select-PIN (CS-Pin) für SD-Karte definieren
-#define CS D2
 
 // Objekte
 SFE_BMP180 pressure;
 RTC_DS1307 RTC;
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Display-Objekt mit vorher definierten Eigenschaften erstellen
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
 const char* ssid = "Janky";
 const char* password = "6zhnJI9ol.";
+
 
 // Kalibrierung: Anzahl der Messungen
 const int measurements = 100;
@@ -91,6 +90,7 @@ String data;
 
 
 
+
 // Setup
 void setup() {
 
@@ -109,12 +109,14 @@ void setup() {
   // Display-Setup
   if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   {
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.cp437(true);          // font
-    display.setCursor(0, 0);
-    Serial.println("Display gestartet!");
+    {
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(WHITE);
+      display.cp437(true);          // font
+      display.setCursor(0, 0);
+      Serial.println("Display gestartet!");
+    }
   }
   else
   {
@@ -182,9 +184,8 @@ void setup() {
 
   // Basisdruck
   calculateBasePressure();
-
+  
   Serial.println("Ausgangsdruck berechnet!");
-
   drawLoadingscreen5();
 
 
@@ -223,13 +224,11 @@ void setup() {
 
   drawLoadingscreen8();
 
-
+  drawLoadingscreen9();
 
   drawLoadingscreen9();
 
- 
   drawLoadingscreen10();
-
 
   drawSplashscreen();
   delay(1500);
@@ -312,6 +311,7 @@ void loop() {
   //if (a > 20)
   //  timer = 600
 
+/*
   double t = millis() / 1000;
   String teil1 = String(String(t) + ";");
   String teil2 = String(teil1 + String(h));
@@ -327,5 +327,6 @@ void loop() {
   data = data + teil10;
 
   Serial.println(data);
+  */
 
 }

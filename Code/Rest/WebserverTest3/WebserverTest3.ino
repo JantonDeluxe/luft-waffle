@@ -47,7 +47,8 @@ ESP8266WebServer server(80);
 
 // Name und Passwort WLAN oder Access Point
 const char* ssid = "Janky";  
-const char* password = "6zhnJI9ol."; 
+const char* password = "***REMOVED***"; 
+
 
 // Kalibrierung: Anzahl der Messungen
 const int messungen = 100;

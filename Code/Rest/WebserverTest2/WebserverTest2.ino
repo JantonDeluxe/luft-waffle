@@ -9,7 +9,7 @@ ESP8266WebServer server(80);          // Webserverport auf 80 setzten (Standardp
 
 // Name und Passwort Access Point
 const char *ssid = "Hoehenmesser";    // ssid festlegen
-const char *password = "BoschBMP180"; // Passwort festlegen
+const char *password = "***REMOVED***"; // Passwort festlegen
 
 
 

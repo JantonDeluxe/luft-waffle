@@ -47,8 +47,12 @@ SSD1306AsciiWire oled;
 ESP8266WebServer server(80);
 
 // Name und Passwort Access Point
+
 const char *ssid = "MyNetwork";  
-const char *password = "Kaiqu2ah"; 
+
+const char *ssid = "";  
+const char *password = ""; 
+
 
 // Kalibrierung: Anzahl der Messungen
 const int messungen = 100;
