@@ -58,8 +58,8 @@ ESP8266WebServer server(80);
 
 
 // Name und Passwort WLAN oder Access Point
-const char* ssid = "Janky";
-const char* password = "6zhnJI9ol.";
+const char* ssid = "REMOVED";
+const char* password = "REMOVED";
 
 // Kalibrierung: Anzahl der Messungen
 const int measurements = 100;
@@ -86,8 +86,6 @@ float Array[measurements];
 float P0 = 0.0;
 
 char status;
-
-String data;
 
 
 
@@ -145,7 +143,7 @@ void setup() {
 
   drawLoadingscreen2();
 
-
+/*
   // RTC-Setup
   if (RTC.begin())
     Serial.println("RTC gestartet!");
@@ -163,7 +161,7 @@ void setup() {
     Serial.println("RTC bisher noch nicht gesetzt!");
     RTC.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
-
+*/
   drawLoadingscreen3();
 
 
@@ -308,28 +306,3 @@ void loop() {
       startstop = false;
     }
   }
-
-  //if (a > 20)
-  //  timer = 600
-
-/*
-  double t = millis() / 1000;
-  String teil1 = String(String(t) + ";");
-  String teil2 = String(teil1 + String(h));
-  String teil3 = String(teil2 + ";");
-  String teil4 = String(teil3 + String(v));
-  String teil5 = String(teil4 + ";");
-  String teil6 = String(teil5 + String(a));
-  String teil7 = String(teil6 + ";");
-  String teil8 = String(teil7 + String(highest));
-  String teil9 = String(teil8 + ";");
-  String teil10 = String(teil9 + String(Temp));
-
-  data = data + teil10;
-
-  Serial.println(data);
-  */
-
-  
-
-}

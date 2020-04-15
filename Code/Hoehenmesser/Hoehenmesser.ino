@@ -42,7 +42,8 @@ SSD1306AsciiWire oled;
 
 // Name und Passwort Access Point
 const char *ssid = "Hoehenmesser";  
-const char *password = "BoschBMP180"; 
+const char *password = "***REMOVED***"; 
+
 
 // Variablen
 double baseline;
