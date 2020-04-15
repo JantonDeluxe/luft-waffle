@@ -1,5 +1,5 @@
-/* Höhenmesser
-  
+/* Höhenmesser 2.0
+
   Projektseite:
   -------------
   https://jantondeluxe.github.io
@@ -10,6 +10,7 @@
   Board: WEMOS D1 mini pro V1.0
   Altimeter: Bosch BMP180
   Display: GM009605 OLED
+  D1 mini Data logger shield mit DS1307 RTC
 
 
   Disclaimer:
@@ -26,52 +27,73 @@
 */
 
 // Libraries
-#include <SFE_BMP180.h>
 #include <Wire.h>
-#include <SSD1306Ascii.h>
-#include <SSD1306AsciiWire.h>
+#include <FS.h>
+#include <SFE_BMP180.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <SD.h>
+#include <RTClib.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <FS.h> 
+
 
 // Header
-#include "index.h"
+#include "StartPage.h"
+#include "ChartPage.h"
+#include "AboutPage.h"
 
-// I2C-Adresse OLED
-#define I2C_ADDRESS 0x3C
+
+// Display-Eigenschaften definieren
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1 // -1, da kein Reset-Pin vorhanden
+
 
 // Objekte
 SFE_BMP180 pressure;
-SSD1306AsciiWire oled;
+RTC_DS1307 RTC;
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 ESP8266WebServer server(80);
 
+
 // Name und Passwort WLAN oder Access Point
-const char* ssid = "Hoehenmesser";  
-const char* password = "BoschBMP180"; 
+const char* ssid = "Janky";
+const char* password = "6zhnJI9ol.";
 
 // Kalibrierung: Anzahl der Messungen
-const int messungen = 100;
+const int measurements = 100;
 
 // Globale Variablen
 double highest;
-double lowest;
 double P;
+double h;
+double Temp;
+double v;
 double a;
-double T;
+double S1;
+double S2;
+double deltaS;
+double del = 0;
+double timer = 400;
+double lowestV;
 
+bool startstop = false;
 
-double* pointereins = &T;
-double* pointerzwei = &a;
+float T0;
+float deltaT;
+float Array[measurements];
+float P0 = 0.0;
 
 char status;
 
-float Array[messungen];
-float ausgangsdruck = 0.0;
+String data;
 
 
 
-//Setup
-void setup(void) {
+
+// Setup
+void setup() {
 
   // Serial-Setup
   Serial.begin(115200);
@@ -79,23 +101,71 @@ void setup(void) {
   Serial.println("");
   Serial.println("Serial gestartet!");
 
+
   // I2C-Setup
   Wire.begin();
   Serial.println("I2C gestartet!");
 
-  //Display-Setup
-  oled.begin(&Adafruit128x64, I2C_ADDRESS);
-  oled.set400kHz();
-  oled.setFont(font5x7);
-  
-  Serial.println("Display gestartet!"); 
 
-  oled.clear();
-  oled.set2X();
-  oled.println("START");
-  oled.set1X();
-  delay(500);
-  oled.clear();
+  // Display-Setup
+  if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  {
+    {
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(WHITE);
+      display.cp437(true);          // font
+      display.setCursor(0, 0);
+      Serial.println("Display gestartet!");
+    }
+  }
+  else
+  {
+    Serial.println("Display nicht gefunden!");
+    while (1);
+  }
+
+  drawLoadingscreen1();
+
+
+  // Dateisystem starten
+  if (SPIFFS.begin())
+  {
+    Serial.println("SPIFFS gestartet!");
+  }
+  else
+  {
+    Serial.println("SPIFFS nicht gestartet!");
+    display.clearDisplay();
+    display.print("SPIFFS nicht gestartet!");
+    delay(1000);
+    display.clearDisplay();
+    while (1);
+  }
+
+  drawLoadingscreen2();
+
+
+  // RTC-Setup
+  if (RTC.begin())
+    Serial.println("RTC gestartet!");
+  else
+  {
+    Serial.println("RTC nicht gestartet!");
+    display.clearDisplay();
+    display.print("RTC nicht gestartet!");
+    delay(1000);
+    display.clearDisplay();
+    while (1);
+  }
+
+  if (! RTC.isrunning()) {
+    Serial.println("RTC bisher noch nicht gesetzt!");
+    RTC.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+
+  drawLoadingscreen3();
+
 
   //Sensor-Setup
   if (pressure.begin())
@@ -103,227 +173,163 @@ void setup(void) {
   else
   {
     Serial.println("BMP180 fehlt!");
+    display.clearDisplay();
+    display.print("BMP180 fehlt!");
+    delay(1000);
+    display.clearDisplay();
     while (1);
   }
 
-/* // WLAN-Verbindung
+  drawLoadingscreen4();
+
+
+  // Basisdruck
+  calculateBasePressure();
+  
+  Serial.println("Ausgangsdruck berechnet!");
+  drawLoadingscreen5();
+
+
+  // WLAN-Verbindung
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
+  drawLoadingscreen6();
+
   Serial.println("");
   Serial.print("Verbunden mit: ");
   Serial.println(ssid);
-*/
 
-  // Access Point-Setup
-  IPAddress local_IP(192,168,4,22);
-  IPAddress gateway(192,168,4,9);
-  IPAddress subnet(255,255,255,0);
+  drawLoadingscreen7();
 
-  WiFi.softAPConfig(local_IP, gateway, subnet);
-  WiFi.softAP(ssid, password);
-
-  Serial.println("Access Point getstartet!");
-
-  // Dateisystem starten
-  if(SPIFFS.begin())
-   {
-     Serial.println("SPIFFS gestartet!");
-   }
-   else
-   {
-     Serial.println("SPIFFS nicht gestartet!");
-     while (1);
-    }
 
   // Webserver-Setup
   server.on("/", handleRoot);
+  server.on("/start", handleStart);
+  server.on("/stopp", handleStopp);
+  server.on("/chart", handleChart);
+  server.on("/about", handleAbout);
+  server.on("/calibrate", handleCalibration);
   server.on("/readData", handleData);
   server.onNotFound(handleWebRequests);
+
   server.begin();
 
-  Serial.println("HTTP-Server gestartet!"); 
+  Serial.println("HTTP-Server gestartet!");
   Serial.print("IP: ");
-  Serial.println(WiFi.softAPIP()); 
-/*
+  /* Serial.println(WiFi.softAPIP()); */
   Serial.println(WiFi.localIP());
-*/
-  
-  // Basisdruck
-  for (int i = 0; i < messungen; i++)
-  {
-    Array[i] = getPressure();
-  }
-  for (int i = 0; i < messungen; i++)
-  {
-    ausgangsdruck = ausgangsdruck + Array[i];
-  } 
-  ausgangsdruck = ausgangsdruck / messungen;
 
-  // statische Teile der Höhenanzeigen
-  oled.setCursor(0, 3);
-  oled.print("Hoehe:");
-  oled.setCursor(0,5);
-  oled.print("Max:");
+  drawLoadingscreen8();
 
-  }
+  drawLoadingscreen9();
 
+  drawLoadingscreen9();
 
-  // Hauptcode
-  void loop(void) {
+  drawLoadingscreen10();
 
-    // Webserver
-    server.handleClient();
-    
-    // Druck messen
-    P = getPressure();
-
-    // Höhenunterschied
-    a = pressure.altitude(P, ausgangsdruck);
-
-    // Maximalwerte
-    if (a < lowest) lowest = a;
-
-    if (a > highest) highest = a;
-
-    // Temperatur messen
-    status = pressure.startTemperature();
-    delay(100);
-    status = pressure.getTemperature(T);
-
-    // Höhenunterschied anzeigen
-    oled.set2X();
-    oled.setCursor(40, 2);               
-    if (a >= 0.0) oled.print(" ");      
-    oled.print(a);
-    oled.print("m");
-
-    // Maximum anzeigen
-    oled.setCursor(40, 4);               
-    if (highest >= 0.0) oled.print(" ");
-    oled.print(highest);
-    oled.print("m");
-    oled.set1X();
-
-    // Druckanzeige
-    oled.setCursor(0, 0);
-    oled.print(getPressure());
-    oled.print(" mbar");
-
-    // Temperaturanzeige
-    oled.setCursor(79, 0);
-    if (a >= 0.0) oled.print(" ");
-    oled.print(*pointereins);
-    oled.println(" C");
-
-    // IP-Adresse anzeigen
-    oled.setCursor(0, 7);
-    oled.print("IP: ");
-
-    oled.print(WiFi.softAPIP());
-    
-    /*
-    oled.print(WiFi.localIP());
-    */
-    
-    delay(333);
-  }
-  
-
-// Webserver
-void handleRoot() {
-  String s = MAIN_page;
-  server.send(200, "text/html", s);
-}
-
-void handleData(){
-  double d = *pointerzwei;
-  double t = millis() / 1000;
-  String teil = String(String(t) + ";");
-  String kombi = String(teil + String(d));
-  server.send(200, "text/plain", kombi);
-}
-
-void handleWebRequests(){
-  if(loadFromSpiffs(server.uri())) return;
-  String message = "File Not Detected\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " NAME:"+server.argName(i) + "\n VALUE:" + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  Serial.println(message);
-}
-
-bool loadFromSpiffs(String path){
-  String dataType = "text/plain";
-  if(path.endsWith("/")) path += "index.htm";
- 
-  if(path.endsWith(".src")) path = path.substring(0, path.lastIndexOf("."));
-  else if(path.endsWith(".html")) dataType = "text/html";
-  else if(path.endsWith(".htm")) dataType = "text/html";
-  else if(path.endsWith(".css")) dataType = "text/css";
-  else if(path.endsWith(".js")) dataType = "application/javascript";
-  else if(path.endsWith(".png")) dataType = "image/png";
-  else if(path.endsWith(".gif")) dataType = "image/gif";
-  else if(path.endsWith(".jpg")) dataType = "image/jpeg";
-  else if(path.endsWith(".ico")) dataType = "image/x-icon";
-  else if(path.endsWith(".xml")) dataType = "text/xml";
-  else if(path.endsWith(".pdf")) dataType = "application/pdf";
-  else if(path.endsWith(".zip")) dataType = "application/zip";
-  File dataFile = SPIFFS.open(path.c_str(), "r");
-  if (server.hasArg("download")) dataType = "application/octet-stream";
-  if (server.streamFile(dataFile, dataType) != dataFile.size()) {
-  }
- 
-  dataFile.close();
-  return true;
+  drawSplashscreen();
+  delay(1500);
+  display.clearDisplay();
 }
 
 
 
-// Funktion getPressure
-double getPressure()
-{
+
+
+void loop() {
+
+  // Zeitmessung starten
+  T0 = millis();
+
+  /*// Uhrzeit anzeigen
+    DateTime now = RTC.now();
+
+    Serial.print(now.year(), DEC);
+    Serial.print('/');
+    Serial.print(now.month(), DEC);
+    Serial.print('/');
+    Serial.print(now.day(), DEC);
+    Serial.print(" (");
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.println(")");
+  */
+
+  // Webserver
+  server.handleClient();
+
+  // Druck messen
+  P = getPressure();
+
+  // Ausgangsstrecke
+  S1 = h;
+
+  // Höhenunterschied
+  h = pressure.altitude(P, P0);
+
+  // Streckenberechnung
+  S2 = h;
+  deltaS = S2 - S1;
+
+  // Maximum
+  if (h > highest) highest = h;
+  if (v < lowestV) lowestV = v;
+
   // Temperatur messen
   status = pressure.startTemperature();
-  if (status != 0)
-  {
-    // Warten bis Messung fertig
-    delay(status);
+  delay(status);
+  status = pressure.getTemperature(Temp);
 
-     // Temperatur erhalten
-    status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      
-      // Druck messen
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        // Warten bis Messung fertig
-        delay(status);
+  // Werte anzeigen
+  anzeige();
 
-        //Druck erhalten
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-          return(P);
-        }
-        else Serial.println("Fehler beim Erhalten des Drucks");
-      }
-      else Serial.println("Fehler beim Starten der Druckmessung");
+  // Mögliche Verzögerung
+  delay(del);
+
+  // Zeitmessung stoppen
+  deltaT = millis() - T0;
+  deltaT = deltaT / 1000;
+
+  // Geschwindigkeit und Beschleunigung ausrechnen
+  v = deltaS / deltaT;
+  a = (2 * deltaS) / (deltaT * deltaT);
+
+  // Messung gestartet
+  if (startstop == true) {
+    timer = timer - 1;
+    if (timer == 0) {
+      startstop = false;
     }
-    else Serial.println("Fehler beim Erhalten der Temperatur");
   }
-  else Serial.println("Fehler beim Starten der Temperaturmessung");
+
+  //if (a > 20)
+  //  timer = 600
+
+/*
+  double t = millis() / 1000;
+  String teil1 = String(String(t) + ";");
+  String teil2 = String(teil1 + String(h));
+  String teil3 = String(teil2 + ";");
+  String teil4 = String(teil3 + String(v));
+  String teil5 = String(teil4 + ";");
+  String teil6 = String(teil5 + String(a));
+  String teil7 = String(teil6 + ";");
+  String teil8 = String(teil7 + String(highest));
+  String teil9 = String(teil8 + ";");
+  String teil10 = String(teil9 + String(Temp));
+
+  data = data + teil10;
+
+  Serial.println(data);
+  */
+
+  
+
 }
